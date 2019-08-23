@@ -16,6 +16,7 @@ class Sensor():
     self.pos = position
     self.freq = frequency
     self.orientation = orientation
+    self.sensor_data = []
   
   def read(self, objs):
     pass

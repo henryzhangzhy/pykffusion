@@ -31,7 +31,12 @@ class Test_Car():
   def test_viz(self):
     plt.figure(1, figsize=(20,12))
     self.car.viz()
-    plt.show(1)
+    plt.pause(1)
+  
+  def test_get_object(self):
+    obj = self.car.get_object([1,1,0])
+    assert obj.velocity == 5
+    assert obj.close_point == (2, 1.75/2)
 
 
 # functions

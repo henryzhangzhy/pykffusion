@@ -32,7 +32,7 @@ class Test_Road():
   def test_viz(self):
     plt.figure(figsize=(20,12))
     self.road.viz()
-    plt.show(1)
+    plt.pause(1)
 
 # main
 def main():

@@ -39,14 +39,17 @@ class RoadSimulator(Simulator):
     self.objects = []
     self.boundary_offset = (-20, -10, 20, 10)
     self.boundary = [-20, -10, 20, 10]
-    self.ego_object = Car(position=[0,-2,0], orientation=0, v=5, a=0, mode='constant')
-    self.road = Road(start=(0,0,0), end=(100,0,0), lane_num=1, lane_width=4)
+    self.lane_width=4
+    self.ego_object = Car(position=[0,-1*self.lane_width/2,0], orientation=0, v=5, a=0, mode='constant acceleration')
+    self.road = Road(start=(0,0,0), end=(100,0,0), lane_num=1, lane_width=self.lane_width)
   
 
   def simulate(self, dt):
     self.clean_objects()
     
     self.generate_objects()
+
+    self.ego_object.simulate(dt)
     
     for obj in self.objects:
       if not obj.b_static:
@@ -55,9 +58,14 @@ class RoadSimulator(Simulator):
     self.update_boundary()
     
     self.viz()
+
+    objs = self.get_objects(self.ego_object.pos)
+
+    return objs
   
-  def get_objects(self):
-    pass
+  def get_objects(self, pos):
+    objs = [obj.get_object(pos) for obj in self.objects]
+    return objs
   
 
   def clean_objects(self):
