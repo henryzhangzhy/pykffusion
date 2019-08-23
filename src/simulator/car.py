@@ -14,11 +14,13 @@ from matplotlib import pyplot as plt
 
 # classes
 class CarObject():
-  def __init__(self, close_point, other_points, velocity, orientation):
+  def __init__(self, close_point, other_points, velocity, orientation, pos):
+    ''' Contain the super set of all the data that sensors need to generate observation '''
     self.close_point = close_point
     self.other_points = other_points
     self.velocity = velocity
     self.orientation = orientation
+    self.pos = pos
 
 
 class Car():
@@ -130,7 +132,7 @@ class Car():
     
     other_points = [point for idx, point in enumerate(corners) if (idx != close_index and idx != far_index)]
 
-    return CarObject(close_point, other_points, self.v, self.orientation)
+    return CarObject(close_point, other_points, self.v, self.orientation, self.pos)
 
 
   

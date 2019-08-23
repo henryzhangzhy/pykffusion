@@ -37,7 +37,7 @@ def main():
   # sensor_group.add(Lidar((0,0,0), 10))
   sensor_group.add(Radar((0,0,0), 50))
 
-  # fuser = Fusion()
+  multi_sensor_filter = Fusion()
 
   plt.figure(figsize=(20,12))
 
@@ -53,7 +53,7 @@ def main():
 
     sensor_data = sensor_group.read(objs)
 
-    # estimation = fuser.fuse(sensor_data)
+    estimation = multi_sensor_filter.estimate(sensor_data)
     
     time_acc += dt
 

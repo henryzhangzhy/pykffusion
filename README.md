@@ -5,6 +5,7 @@
 - [x] add moving to ego vehilcle
 - [x] add text display
 - [x] add radar model
+- [x] add virtual sensor (use radar center mode instead)
 - [ ] add lidar model
 - [ ] add camera model
 - [ ] add kalman filter
@@ -12,6 +13,8 @@
 - [ ] multi object generation
 - [ ] collision detection
 - [ ] occlusion
+- [ ] adding delayed data
+- [ ] adding asquent data
 
 
 Reference
