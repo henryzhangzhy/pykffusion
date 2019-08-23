@@ -1,24 +1,23 @@
-""" the Sensor Abstract type
+""" the 2D Lidar class
 
 Author: Henry Zhang
 Date:August 22, 2019
 """
 
 # module
-
+from src.sensor.sensor import Sensor
 
 # parameters
 
 
 # classes
-class Sensor():
+class Lidar(Sensor):
   def __init__(self, position = (0,0,0), frequency = 10, orientation = 0):
-    self.pos = position
-    self.freq = frequency
-    self.orientation = orientation
+    super(Lidar, self).__init__(position, frequency, orientation)
   
   def read(self, objs):
     pass
+
 
 # functions
 

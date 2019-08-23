@@ -23,6 +23,11 @@ class SensorGroup():
   def read(self):
     self.sensor_data = [sensor.read() for sensor in self.sensor_group]
     return self.sensor_data
+  
+  def get_min_interval(self):
+    freq_max = max([sensor.freq for sensor in self.sensor_group])
+    dt = 1 / freq_max
+    return dt
 
 # functions
 

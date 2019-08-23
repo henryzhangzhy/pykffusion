@@ -1,4 +1,4 @@
-""" the Camera class
+""" the 2D Radar class
 
 Author: Henry Zhang
 Date:August 22, 2019
@@ -11,9 +11,9 @@ from src.sensor.sensor import Sensor
 
 
 # classes
-class Camera(Sensor):
-  def __init__(self, position = (0,0,0), frequency = 10, orientation = 0):
-    super(Camera, self).__init__(position, frequency, orientation)
+class Radar(Sensor):
+  def __init__(self, position = (0,0,0), frequency = 50, orientation = 0):
+    super(Radar, self).__init__(position, frequency, orientation)
   
   def read(self, objs):
     pass
