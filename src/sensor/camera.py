@@ -12,8 +12,8 @@ from src.sensor.sensor import Sensor
 
 # classes
 class Camera(Sensor):
-  def __init__(self, position = (0,0,0), frequency = 10, orientation = 0):
-    super(Camera, self).__init__('Camera', position, frequency, orientation)
+  def __init__(self, rel_pos=(0,0,0), frequency=10, orientation=0, abs_pos=[0,0,0]):
+    super(Camera, self).__init__('Camera', rel_pos, frequency, orientation, abs_pos)
   
   def read(self, objs, time_acc):
     pass

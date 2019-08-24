@@ -12,9 +12,10 @@ Date:August 22, 2019
 
 # classes
 class Sensor():
-  def __init__(self, sensor_type, position = (0,0,0), frequency = 10, orientation = 0):
+  def __init__(self, sensor_type, rel_pos=(0,0,0), frequency=10, orientation=0, abs_pos=[0,0,0]):
     self.type = sensor_type
-    self.pos = position
+    self.rel_pos = rel_pos
+    self.abs_pos = abs_pos
     self.freq = frequency
     self.orientation = orientation
     self.sensor_data = []

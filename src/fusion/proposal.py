@@ -16,10 +16,10 @@ class Proposal():
     self.time = time
     self.model = model
   
-  def generate_filter(self):
-    fter = self.model.generate_filter()
-    fter.update_time = self.time
-    return fter
+  def get_model(self):
+    self.model.generate_filter()
+    # model.filter.update_time = self.time
+    return self.model
 
   def viz(self):
     self.model.viz()

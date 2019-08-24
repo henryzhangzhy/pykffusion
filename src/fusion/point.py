@@ -23,6 +23,8 @@ class Point2D():
     self.vy = vy
     self.ax = ax
     self.ay = ay
+    self.type = 'Point'
+    self.filter = None
   
   def generate_filter(self):
     state = np.array([self.x, self.y, self.vx, self.vy, self.ax, self.ay])
@@ -38,13 +40,14 @@ class Point2D():
     process_noise = np.diag([0.1, 0.1, 0.1, 0.1, 0.1, 0.1])
     observation_noise = np.diag([0.1, 0.1, 0.5, 0.5, 1.0, 1.0])
     
-    return KalmanFilter(x_prior=state, \
+    self.filter = KalmanFilter(x_prior=state, \
                         P_prior=variance, \
                         mtx_transition=transition_matrix, \
                         mtx_observation=observation_matrix, \
                         mtx_control=control_matrix, \
                         noise_process=process_noise, \
                         noise_observation=observation_noise)
+  
   def generate_observation(self):
     return np.array([self.x, self.y, self.vx, self.vy, self.ax, self.ay])
   

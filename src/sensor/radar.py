@@ -16,8 +16,8 @@ from src.sensor.sensor import Sensor, SensorData
 
 # classes
 class Radar(Sensor):
-  def __init__(self, position = (0,0,0), frequency = 50, orientation = 0, mode='center', b_noise=True):
-    super(Radar, self).__init__('Radar', position, frequency, orientation)
+  def __init__(self, rel_pos=(0,0,0), frequency=50, orientation=0, mode='center', b_noise=True, abs_pos=[0,0,0]):
+    super(Radar, self).__init__('Radar', rel_pos, frequency, orientation, abs_pos)
     self.mode = mode
     self.b_noise = b_noise
     self.set_variances()
@@ -25,7 +25,7 @@ class Radar(Sensor):
   def set_variances(self):
     if self.b_noise:
       self.variance_distance = 0.1
-      self.variance_angle = 0.05
+      self.variance_angle = 0.02
       self.variance_velocity = 0.5
     else:
       self.variance_distance = 0
@@ -40,14 +40,15 @@ class Radar(Sensor):
         point = obj.close_point
       elif (self.mode == 'center'):
         point = obj.pos
-      point_ds = math.hypot( point[0] - self.pos[0], point[1] - self.pos[1])
-      point_theta = math.atan2( point[1] - self.pos[1],  point[0] - self.pos[0])
+      point_ds = math.hypot( point[0] - self.abs_pos[0], point[1] - self.abs_pos[1])
+      point_theta = math.atan2( point[1] - self.abs_pos[1],  point[0] - self.abs_pos[0])
       ds = point_ds + random.gauss(0, self.variance_distance)
       theta = point_theta + random.gauss(0, self.variance_angle)
-      # print(ds, close_point_ds, theta, close_point_theta)
+      # print(ds, point_ds, theta, point_theta)
+      # print(ds - point_ds, theta - point_theta)
       
-      x = self.pos[0] + ds * math.cos(theta)
-      y = self.pos[1] + ds * math.sin(theta)
+      x = self.abs_pos[0] + ds * math.cos(theta)
+      y = self.abs_pos[1] + ds * math.sin(theta)
       vx = obj.velocity * math.cos(obj.orientation) + random.gauss(0, self.variance_velocity)
       vy = obj.velocity * math.sin(obj.orientation) + random.gauss(0, self.variance_velocity)
       

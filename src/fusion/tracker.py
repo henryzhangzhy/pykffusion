@@ -20,21 +20,21 @@ class Tracker():
   def __init__(self, proposal):
     self.model = self.initialize(proposal)
     self.observation = None
-    self.state = self.model.x_post
-    self.update_time = 0
+    self.state = self.model.filter.x_post
   
   def initialize(self, proposal):
-    return proposal.generate_filter()
+    self.update_time = proposal.time
+    return proposal.get_model()
 
   def predict(self, time_acc):
-    self.model.predict(time_acc - self.update_time)
-    self.state = self.model.x_pre
+    self.model.filter.predict(time_acc - self.update_time)
+    self.state = self.model.filter.x_pre
     self.update_time = time_acc
   
   def update(self):
     if not self.observation is None:
-      self.model.update(self.observation)
-      self.state = self.model.x_post
+      self.model.filter.update(self.observation)
+      self.state = self.model.filter.x_post
   
   def associate(self, proposal):
     ''' associate track and proposal, return True if success and update observation, False if not associated '''
@@ -49,6 +49,7 @@ class Tracker():
   def viz(self):
     plt.scatter(self.state[0], self.state[1], c='r', marker='o', label='tracker')
     plt.text(self.state[0], self.state[1] + 2, 'v:({:.1f}, {:.1f})'.format(self.state[2], self.state[3]))
+    
 # functions
 
 
