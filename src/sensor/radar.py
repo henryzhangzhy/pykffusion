@@ -15,6 +15,14 @@ from src.sensor.sensor import Sensor, SensorData
 
 
 # classes
+class RadarData():
+  def __init__(self, x, y, vx, vy, obj_id):
+    self.x = x
+    self.y = y
+    self.vx = vx
+    self.vy = vy
+    self.id = obj_id
+
 class Radar(Sensor):
   def __init__(self, rel_pos=(0,0,0), frequency=50, orientation=0, mode='center', b_noise=True, abs_pos=[0,0,0]):
     super(Radar, self).__init__('Radar', rel_pos, frequency, orientation, abs_pos)
@@ -52,15 +60,15 @@ class Radar(Sensor):
       vx = obj.velocity * math.cos(obj.orientation) + random.gauss(0, self.variance_velocity)
       vy = obj.velocity * math.sin(obj.orientation) + random.gauss(0, self.variance_velocity)
       
-      sensor_data.append((x, y, vx, vy))
+      sensor_data.append(RadarData(x, y, vx, vy, obj.id))
     
     self.sensor_data = SensorData(self.type, time_acc, sensor_data)
 
     return self.sensor_data
   
   def viz(self):
-    x = [data[0] for data in self.sensor_data.data]
-    y = [data[1] for data in self.sensor_data.data]
+    x = [data.x for data in self.sensor_data.data]
+    y = [data.y for data in self.sensor_data.data]
     plt.scatter(x, y, c='g', label='radar {}'.format(self.mode))
 
 

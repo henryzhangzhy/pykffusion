@@ -14,17 +14,19 @@ from matplotlib import pyplot as plt
 
 # classes
 class CarObject():
-  def __init__(self, close_point, other_points, velocity, orientation, pos):
+  def __init__(self, close_point, other_points, velocity, orientation, pos, obj_id):
     ''' Contain the super set of all the data that sensors need to generate observation '''
     self.close_point = close_point
     self.other_points = other_points
     self.velocity = velocity
     self.orientation = orientation
     self.pos = pos
+    self.id = obj_id
 
 
 class Car():
 
+  count = 0
   def __init__(self, position=[0,0,0], orientation=0, v = 0, a = 0, mode='constant acceleration'):
     self.pos = position
     self.orientation = orientation
@@ -36,6 +38,8 @@ class Car():
     self.l = 4.0
     self.mode = mode
     self.b_static = False
+    self.id = Car.count
+    Car.count += 1
   
 
   def simulate(self, dt):
@@ -132,7 +136,7 @@ class Car():
     
     other_points = [point for idx, point in enumerate(corners) if (idx != close_index and idx != far_index)]
 
-    return CarObject(close_point, other_points, self.v, self.orientation, self.pos)
+    return CarObject(close_point, other_points, self.v, self.orientation, self.pos, self.id)
 
 
   
@@ -141,7 +145,9 @@ class Car():
     outline = self.get_outline()
     for line in outline:
       plt.plot(line[0], line[1], c='b')
-    plt.text(self.pos[0], self.pos[1]+1, 'v:{:.1f}, a:{:.1f}'.format(self.v, self.a))
+    plt.text(self.pos[0], \
+             self.pos[1]+1, \
+             'id:{:d}, v:{:.1f}, a:{:.1f}'.format(self.id, self.v, self.a))
 
 
 

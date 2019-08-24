@@ -15,7 +15,7 @@ from src.fusion.kalman_filter import KalmanFilter
 
 # classes
 class Point2D():
-  def __init__(self, x, y, vx, vy, ax=0, ay=0):
+  def __init__(self, x, y, vx, vy, obj_id, ax=0, ay=0):
     ''' constant acceleration 2D point model '''
     self.x = x
     self.y = y
@@ -25,7 +25,7 @@ class Point2D():
     self.ay = ay
     self.type = 'Point'
     self.filter = None
-    self.state = None
+    self.id = obj_id
   
   def generate_filter(self):
     print('There might be huge problem in this model')
@@ -49,22 +49,21 @@ class Point2D():
                         mtx_control=control_matrix, \
                         noise_process=process_noise, \
                         noise_observation=observation_noise)
-    self.state = state
   
   def generate_observation(self):
     return np.array([self.x, self.y, self.vx, self.vy, self.ax, self.ay])
   
   def predict(self, dt):
     self.filter.predict(dt)
-    self.state = self.filter.x_pre
   
   def update(self, z):
     self.filter.update(z)
-    self.state = self.filter.x_post
   
   def viz(self):
     plt.scatter(self.x, self.y, c='y', marker='o', label='proposal')
-    plt.text(self.x, self.y + 1.5, 'v:({:.1f}, {:.1f})'.format(self.vx, self.vy))
+    plt.text(self.x, \
+             self.y + 1.5, \
+             'Pid:{:d}, v:({:.1f}, {:.1f})'.format(self.id, self.vx, self.vy))
 
 # functions
 

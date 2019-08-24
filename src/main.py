@@ -13,6 +13,8 @@ sys.path.append(os.path.curdir)
 #  print(path)
 
 from src.simulator.road_simulator import RoadSimulator
+from src.simulator.logger import Logger
+
 from src.sensor.sensor_group import SensorGroup
 from src.sensor.camera import Camera
 from src.sensor.lidar import Lidar
@@ -42,7 +44,7 @@ def main():
 
   plt.figure(figsize=(20,12))
 
-  # log = Logger()
+  log = Logger()
 
   end_flag = False
 
@@ -57,7 +59,8 @@ def main():
 
     estimation = multi_sensor_filter.estimate(sensor_data)
     
-    # log.write()
+    log.add_timed(time_acc,{'objs':objs, 'sensor_data':sensor_data, 'estimation':estimation})
+    
     plt.title('world {:.3f}, dt={:.3f}'.format(time_acc, dt))
     plt.legend()
     plt.pause(0.0001)

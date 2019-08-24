@@ -57,7 +57,7 @@ class MultiSensorFusion(Fusion):
     proposals = []
     if observations.type == 'Radar':
       for obs in observations.data:
-        proposal = Proposal(observations.time, Point2D(obs[0], obs[1], obs[2], obs[3]))
+        proposal = Proposal(observations.time, Point2D(obs.x, obs.y, obs.vx, obs.vy, obs.id))
         proposals.append(proposal)
     return proposals
 
@@ -84,7 +84,7 @@ class MultiSensorFusion(Fusion):
     estimations = []
 
     for tracker in self.trackers:
-      estimations.append(tracker.state)
+      estimations.append(tracker.estimate)
     
     self.estimations = estimations
 
