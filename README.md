@@ -6,10 +6,12 @@
 - [x] add text display
 - [x] add radar model
 - [x] add virtual sensor (use radar center mode instead)
+- [ ] add visualization to kalman filter
+- [ ] add log to kalman filter
 - [ ] add lidar model
 - [ ] add camera model
-- [ ] add kalman filter
-- [ ] add data association
+- [x] add kalman filter
+- [x] add data association
 - [ ] multi object generation
 - [ ] collision detection
 - [ ] occlusion

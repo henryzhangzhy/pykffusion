@@ -25,6 +25,7 @@ class Point2D():
     self.ay = ay
     self.type = 'Point'
     self.filter = None
+    self.state = None
   
   def generate_filter(self):
     state = np.array([self.x, self.y, self.vx, self.vy, self.ax, self.ay])
@@ -47,9 +48,18 @@ class Point2D():
                         mtx_control=control_matrix, \
                         noise_process=process_noise, \
                         noise_observation=observation_noise)
+    self.state = state
   
   def generate_observation(self):
     return np.array([self.x, self.y, self.vx, self.vy, self.ax, self.ay])
+  
+  def predict(self, dt):
+    self.filter.predict(dt)
+    self.state = self.filter.x_pre
+  
+  def update(self, z):
+    self.filter.update(z)
+    self.state = self.filter.x_post
   
   def viz(self):
     plt.scatter(self.x, self.y, c='y', marker='o', label='proposal')

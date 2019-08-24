@@ -40,7 +40,7 @@ class RoadSimulator(Simulator):
     self.boundary_offset = (-20, -10, 20, 10)
     self.boundary = [-20, -10, 20, 10]
     self.lane_width=4
-    self.ego_object = Car(position=[0,-1*self.lane_width/2,0], orientation=0, v=5, a=0, mode='constant acceleration')
+    self.ego_object = Car(position=[0,-1*self.lane_width/2,0], orientation=0, v=15, a=0, mode='constant acceleration')
     self.road = Road(start=(0,0,0), end=(100,0,0), lane_num=1, lane_width=self.lane_width)
   
 

@@ -63,7 +63,7 @@ def main():
     plt.pause(0.0001)
     plt.clf()
 
-    if time_acc > 10:
+    if time_acc > 5:
       end_flag = True
 
 if __name__ == "__main__":

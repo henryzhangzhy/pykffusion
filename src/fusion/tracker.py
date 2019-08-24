@@ -27,14 +27,14 @@ class Tracker():
     return proposal.get_model()
 
   def predict(self, time_acc):
-    self.model.filter.predict(time_acc - self.update_time)
-    self.state = self.model.filter.x_pre
+    self.model.predict(time_acc - self.update_time)
+    self.state = self.model.state
     self.update_time = time_acc
   
   def update(self):
     if not self.observation is None:
-      self.model.filter.update(self.observation)
-      self.state = self.model.filter.x_post
+      self.model.update(self.observation)
+      self.state = self.model.state
   
   def associate(self, proposal):
     ''' associate track and proposal, return True if success and update observation, False if not associated '''
