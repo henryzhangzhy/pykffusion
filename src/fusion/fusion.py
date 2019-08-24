@@ -25,6 +25,8 @@ class Fusion():
 class MultiSensorFusion(Fusion):
   
   def __init__(self, mode='sequential'):
+    print('sequential fusion has the assumption that data come in this batch are of same time stamp, \
+      thus make a prediction forward to the same time.')
     super(MultiSensorFusion, self).__init__()
     self.mode = mode
     self.trackers = []
@@ -88,8 +90,6 @@ class MultiSensorFusion(Fusion):
 
   
   def sequential_fusion(self):
-    print('sequential fusion has the assumption that data come in this batch are of same time stamp, \
-      thus make a prediction forward to the same time.')
     self.predict()
     self.associate()
     self.update()
