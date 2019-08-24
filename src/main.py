@@ -60,14 +60,21 @@ def main():
     estimation = multi_sensor_filter.estimate(sensor_data)
     
     log.add_timed(time_acc,{'objs':objs, 'sensor_data':sensor_data, 'estimation':estimation})
+    log.viz()
     
+    plt.figure(1)
     plt.title('world {:.3f}, dt={:.3f}'.format(time_acc, dt))
     plt.legend()
     plt.pause(0.0001)
-    plt.clf()
-
     if time_acc > 5:
       end_flag = True
+      plt.show()
+    plt.clf()
+    plt.figure(2)
+    plt.clf()
+
+    
+  
 
 if __name__ == "__main__":
   main()

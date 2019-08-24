@@ -6,6 +6,8 @@ Date:August 24, 2019
 
 # module
 from matplotlib import pyplot as plt
+import math
+from copy import deepcopy
 
 # parameters
 
@@ -22,14 +24,50 @@ class Logger():
   
   def add_timed(self, time, dic):
     for key, value in dic.items():
-      # print(key)
       if not key in self.timed_data:
         self.timed_data[key] = {}
-        # print('created for {}, now in {}'.format(key, key in dic))
-      self.timed_data[key][time] = value
+      self.timed_data[key][time] = deepcopy(value)
+
+  def plot_error(self):
+    if (not 'objs' in self.timed_data) or (not 'estimation' in self.timed_data):
+      return
+    else:
+      time_list = []
+      error_list = []
+      innovation_list = []
+      for time, estimates in self.timed_data['estimation'].items():
+        if time in self.timed_data['objs']:
+          error_time = []
+          innovation_time = []
+
+          objs = self.timed_data['objs'][time]
+          for estimate in estimates:
+            for obj in objs:
+              if estimate.id == obj.id:
+                error = math.hypot(estimate.state[0] - obj.pos[0], \
+                                   estimate.state[1] - obj.pos[1])
+                error_time.append(error)
+                innovation_time.append(math.hypot(estimate.innovation[0], estimate.innovation[1]))
+          if len(error_time) > 0:
+            time_list.append(time)
+            error_list.append( sum(error_time) / len(error_time))
+            innovation_list.append( sum(innovation_time) / len(innovation_time))
+      plt.scatter(time_list, error_list, c='r', label='error')
+      plt.scatter(time_list, innovation_list, c='g', label='innovation')
+
+                
+
 
   def viz(self):
-    pass
+    plt.figure(2)
+    plt.title('logger visualization')
+    self.plot_error()
+
+    plt.legend()
+    
+    
+
+
   
   def write(self):
     pass

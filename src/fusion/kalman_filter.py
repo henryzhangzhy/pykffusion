@@ -24,8 +24,8 @@ class KalmanFilter():
     self.mtx_observation = mtx_observation
     self.noise_process = noise_process
     self.noise_observation = noise_observation
-    self.innovation = None
-    self.innovation_cov = None
+    self.innovation = np.zeros(self.mtx_observation.shape[0])
+    self.innovation_cov = np.zeros(self.noise_observation.shape)
     self.gain = None
   
   def predict(self, dt, u=0):
