@@ -6,6 +6,9 @@ Date:August 23, 2019
 
 # module
 from src.fusion.tracker import Tracker
+from src.fusion.point import Point2D
+from src.fusion.box import Box2D
+from src.fusion.proposal import Proposal
 
 # parameters
 
@@ -25,6 +28,7 @@ class MultiSensorFusion(Fusion):
     super(MultiSensorFusion, self).__init__()
     self.mode = mode
     self.trackers = []
+    self.proposals = []
     self.new_proposals = []
     self.estimations = []
     
@@ -34,12 +38,28 @@ class MultiSensorFusion(Fusion):
 
     self.fusion_module()
 
-    return self.estimation
+    self.viz()
+
+    return self.estimations
   
   def sensing_module(self, observations):
+    ''' generate proposals from observations '''
     proposals = []
+    for single_sensor_observations in observations:
+      single_sensor_proposals = self.generate_proposal(single_sensor_observations)
+      for proposal in single_sensor_proposals:
+        proposals.append(proposal)
     self.proposals = proposals
   
+  def generate_proposal(self, observations):
+    proposals = []
+    if observations.type == 'Radar':
+      for obs in observations.data:
+        proposal = Proposal(observations.time, Point2D(obs[0], obs[1], obs[2], obs[3]))
+        proposals.append(proposal)
+    return proposals
+
+
   def fusion_module(self):
     if (self.mode == 'sequential'):
       self.sequential_fusion()
@@ -68,14 +88,16 @@ class MultiSensorFusion(Fusion):
 
   
   def sequential_fusion(self):
+    print('sequential fusion has the assumption that data come in this batch are of same time stamp, \
+      thus make a prediction forward to the same time.')
     self.predict()
     self.associate()
-    self.initialize()
     self.update()
+    self.initialize()
   
   def predict(self):
     for tracker in self.trackers:
-      tracker.predict()
+      tracker.predict(self.proposals[0].time)
   
   def associate(self):
     new_proposals = []
@@ -99,8 +121,12 @@ class MultiSensorFusion(Fusion):
     for tracker in self.trackers:
       tracker.update()
   
-  def create_tracker(self, proposal):
-    pass
+  def viz(self):
+    for proposal in self.proposals:
+      proposal.viz()
+    for tracker in self.trackers:
+      tracker.viz()
+
   
 
     

@@ -12,7 +12,8 @@ Date:August 22, 2019
 
 # classes
 class Sensor():
-  def __init__(self, position = (0,0,0), frequency = 10, orientation = 0):
+  def __init__(self, sensor_type, position = (0,0,0), frequency = 10, orientation = 0):
+    self.type = sensor_type
     self.pos = position
     self.freq = frequency
     self.orientation = orientation
@@ -20,6 +21,12 @@ class Sensor():
   
   def read(self, objs):
     pass
+
+class SensorData():
+  def __init__(self, sensor_type, time, data):
+    self.type = sensor_type
+    self.time = time
+    self.data = data
 
 # functions
 

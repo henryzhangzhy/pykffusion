@@ -20,8 +20,8 @@ class SensorGroup():
   def add(self, sensor):
     self.sensor_group.append(sensor)
   
-  def read(self, objs):
-    self.sensor_data = [sensor.read(objs) for sensor in self.sensor_group]
+  def read(self, objs, time_acc):
+    self.sensor_data = [sensor.read(objs, time_acc) for sensor in self.sensor_group]
     self.viz()
     return self.sensor_data
   

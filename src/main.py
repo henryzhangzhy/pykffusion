@@ -18,6 +18,7 @@ from src.sensor.camera import Camera
 from src.sensor.lidar import Lidar
 from src.sensor.radar import Radar
 
+from src.fusion.fusion import MultiSensorFusion
 
 # parameters
 
@@ -37,7 +38,7 @@ def main():
   # sensor_group.add(Lidar((0,0,0), 10))
   sensor_group.add(Radar((0,0,0), 50))
 
-  multi_sensor_filter = Fusion()
+  multi_sensor_filter = MultiSensorFusion(mode='sequential')
 
   plt.figure(figsize=(20,12))
 
@@ -50,19 +51,19 @@ def main():
 
   while (not end_flag):
     objs = sim.simulate(dt)
+    time_acc += dt
 
-    sensor_data = sensor_group.read(objs)
+    sensor_data = sensor_group.read(objs, time_acc)
 
     estimation = multi_sensor_filter.estimate(sensor_data)
     
-    time_acc += dt
-
     # log.write()
     plt.title('world {:.3f}, dt={:.3f}'.format(time_acc, dt))
+    plt.legend()
     plt.pause(0.0001)
     plt.clf()
 
-    if time_acc > 5:
+    if time_acc > 10:
       end_flag = True
 
 if __name__ == "__main__":

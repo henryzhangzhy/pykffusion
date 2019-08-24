@@ -9,15 +9,15 @@ import random
 import math
 import matplotlib.pyplot as plt
 
-from src.sensor.sensor import Sensor
+from src.sensor.sensor import Sensor, SensorData
 
 # parameters
 
 
 # classes
 class Radar(Sensor):
-  def __init__(self, position = (0,0,0), frequency = 50, orientation = 0, mode='center', b_noise=False):
-    super(Radar, self).__init__(position, frequency, orientation)
+  def __init__(self, position = (0,0,0), frequency = 50, orientation = 0, mode='center', b_noise=True):
+    super(Radar, self).__init__('Radar', position, frequency, orientation)
     self.mode = mode
     self.b_noise = b_noise
     self.set_variances()
@@ -32,7 +32,7 @@ class Radar(Sensor):
       self.variance_angle = 0
       self.variance_velocity = 0
   
-  def read(self, objs):
+  def read(self, objs, time_acc):
     sensor_data = []
     
     for obj in objs:
@@ -53,14 +53,14 @@ class Radar(Sensor):
       
       sensor_data.append((x, y, vx, vy))
     
-    self.sensor_data = sensor_data
+    self.sensor_data = SensorData(self.type, time_acc, sensor_data)
 
-    return sensor_data
+    return self.sensor_data
   
   def viz(self):
-    x = [data[0] for data in self.sensor_data]
-    y = [data[1] for data in self.sensor_data]
-    plt.scatter(x, y, c='g', label='radar')
+    x = [data[0] for data in self.sensor_data.data]
+    y = [data[1] for data in self.sensor_data.data]
+    plt.scatter(x, y, c='g', label='radar {}'.format(self.mode))
 
 
 

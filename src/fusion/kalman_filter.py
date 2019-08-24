@@ -28,9 +28,9 @@ class KalmanFilter():
     self.innovation_cov = None
     self.gain = None
   
-  def prediction(self, u=None):
-    self.x_pre = self.mtx_transition @ self.x_post + self.mtx_control @ u
-    self.P_pre = self.mtx_transition @ self.P_post @ self.mtx_transition.T + self.noise_process
+  def predict(self, dt, u=0):
+    self.x_pre += dt * (self.mtx_transition @ self.x_post + np.dot(self.mtx_control, u))
+    self.P_pre += (dt**2) * (self.mtx_transition @ self.P_post @ self.mtx_transition.T + self.noise_process)
   
   def update(self, z):
     self.innovation = z - self.mtx_observation @ self.x_pre

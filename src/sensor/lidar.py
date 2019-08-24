@@ -13,9 +13,9 @@ from src.sensor.sensor import Sensor
 # classes
 class Lidar(Sensor):
   def __init__(self, position = (0,0,0), frequency = 10, orientation = 0):
-    super(Lidar, self).__init__(position, frequency, orientation)
+    super(Lidar, self).__init__('Lidar', position, frequency, orientation)
   
-  def read(self, objs):
+  def read(self, objs, time_acc):
     pass
 
 

@@ -24,9 +24,9 @@ class Test_Radar():
   def test_read(self):
     car = Car()
     objs = [car.get_object([-10, 1, 0])]
-    sensor_data = self.radar.read(objs)
+    sensor_data = self.radar.read(objs, 0)
     print('testing reading radar')
-    print(sensor_data)
+    print(sensor_data.data)
     car.viz()
     self.radar.viz()
     plt.pause(0.5)
