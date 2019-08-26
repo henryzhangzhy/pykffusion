@@ -1,6 +1,11 @@
 # Python implementation of the multi sensor fusion using the Kalman Filter
 
 ## Release
+- version 0.1.1
+  - single sensor single object tracking
+  - correct motion model
+  - cleaner main loop
+  - configurable figure display
 - version 0.1
   - a center radar
   - plot the error in localization
@@ -17,6 +22,7 @@
 - [x] add log to kalman filter
 - [x] correct point model
 - [x] added forget time
+- [x] allow turn on or off one view. (By set fig_name to None)
 - [ ] add more radar to test multi sensor
 - [ ] add lidar model
 - [ ] add camera model
