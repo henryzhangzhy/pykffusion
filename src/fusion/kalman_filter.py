@@ -29,8 +29,8 @@ class KalmanFilter():
     self.gain = None
   
   def predict(self, dt, u=0):
-    self.x_pre += dt * (self.mtx_transition @ self.x_post + np.dot(self.mtx_control, u))
-    self.P_pre += (dt**2) * (self.mtx_transition @ self.P_post @ self.mtx_transition.T + self.noise_process)
+    self.x_pre = self.mtx_transition @ self.x_post + np.dot(self.mtx_control, u)
+    self.P_pre = self.mtx_transition @ self.P_post @ self.mtx_transition.T + self.noise_process
   
   def update(self, z):
     self.innovation = z - self.mtx_observation @ self.x_pre
@@ -38,7 +38,10 @@ class KalmanFilter():
     self.gain = self.P_pre @ self.mtx_observation @ np.linalg.inv(self.innovation_cov)
     self.x_post = self.x_pre + self.gain @ self.innovation
     self.P_post = self.P_pre - self.gain @ self.innovation_cov @ self.gain.T
-
+  
+  def predict_constant_F_variant_time(self, dt, u=0):
+    self.x_pre += dt * (self.mtx_transition @ self.x_post + np.dot(self.mtx_control, u))
+    self.P_pre += (dt**2) * (self.mtx_transition @ self.P_post @ self.mtx_transition.T + self.noise_process)
 # functions
 
 

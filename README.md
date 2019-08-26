@@ -1,13 +1,22 @@
 # Python implementation of the multi sensor fusion using the Kalman Filter
 
+## Release
+- version 0.1
+  - a center radar
+  - plot the error in localization
+  - plot the innovation
+
+
 ## TODO
 
 - [x] add moving to ego vehilcle
 - [x] add text display
 - [x] add radar model
 - [x] add virtual sensor (use radar center mode instead)
-- [ ] add visualization to kalman filter
-- [ ] add log to kalman filter
+- [x] add visualization to kalman filter
+- [x] add log to kalman filter
+- [ ] correct point model
+- [ ] add more radar to test multi sensor
 - [ ] add lidar model
 - [ ] add camera model
 - [x] add kalman filter

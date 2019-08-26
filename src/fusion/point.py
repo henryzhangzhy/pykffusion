@@ -31,12 +31,12 @@ class Point2D():
     print('There might be huge problem in this model')
     state = np.array([self.x, self.y, self.vx, self.vy, self.ax, self.ay])
     variance = np.diag([0.1, 0.1, 0.5, 0.5, 1.0, 1.0])
-    transition_matrix = np.array([[0, 0, 1, 0, 0, 0],
+    transition_matrix = np.array([[1, 0, 0, 0, 0, 0],
+                               [0, 1, 0, 0, 0, 0],
+                               [0, 0, 1, 0, 0, 0], 
                                [0, 0, 0, 1, 0, 0],
-                               [0, 0, 0, 0, 1, 0], 
-                               [0, 0, 0, 0, 0, 1],
-                               [0, 0, 0, 0, 0, 0],
-                               [0, 0, 0, 0, 0, 0]])
+                               [0, 0, 0, 0, 1, 0],
+                               [0, 0, 0, 0, 0, 1]])
     observation_matrix = np.eye(state.shape[0])
     control_matrix = 0
     process_noise = np.diag([0.1, 0.1, 0.1, 0.1, 0.1, 0.1])
@@ -54,16 +54,27 @@ class Point2D():
     return np.array([self.x, self.y, self.vx, self.vy, self.ax, self.ay])
   
   def predict(self, dt):
+    self.update_mtx_transition(dt)
     self.filter.predict(dt)
   
   def update(self, z):
     self.filter.update(z)
+  
+  def update_mtx_transition(self, dt):
+    matrix = np.array([[1, 0, dt, 0, (dt**2)/2, 0],
+                       [0, 1, 0, dt, 0, (dt**2)/2],
+                       [0, 0, 1, 0, dt, 0], 
+                       [0, 0, 0, 1, 0, dt],
+                       [0, 0, 0, 0, 1, 0],
+                       [0, 0, 0, 0, 0, 1]])
+    self.filter.mtx_transition = matrix
   
   def viz(self):
     plt.scatter(self.x, self.y, c='y', marker='o', label='proposal')
     plt.text(self.x, \
              self.y + 1.5, \
              'Pid:{:d}, v:({:.1f}, {:.1f})'.format(self.id, self.vx, self.vy))
+
 
 # functions
 
