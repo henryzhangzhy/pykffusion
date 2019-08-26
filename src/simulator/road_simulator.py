@@ -18,7 +18,7 @@ from src.simulator.road import Road
 # classes
 class RoadSimulator(Simulator):
 
-  def __init__(self, gen_mode = 'constant', object_num = 1, probability = 0.1, obj_mode='static'):
+  def __init__(self, gen_mode = 'constant', fig_name=None, object_num = 1, probability = 0.1, obj_mode='static'):
     ''' Road Simulator class
     
     Args:
@@ -42,6 +42,8 @@ class RoadSimulator(Simulator):
     self.lane_width=4
     self.ego_object = Car(position=[0,-1*self.lane_width/2,0], orientation=0, v=15, a=0, mode='constant acceleration')
     self.road = Road(start=(0,0,0), end=(100,0,0), lane_num=1, lane_width=self.lane_width)
+    self.fig_name = fig_name
+    self.time_acc = 0
   
 
   def simulate(self, dt):
@@ -57,11 +59,13 @@ class RoadSimulator(Simulator):
     
     self.update_boundary()
     
-    self.viz()
+    self.viz(dt)
 
     objs = self.get_objects(self.ego_object.pos)
 
-    return objs
+    self.time_acc += dt
+
+    return objs, self.time_acc
   
   def get_objects(self, pos):
     objs = [obj.get_object(pos) for obj in self.objects]
@@ -137,14 +141,19 @@ class RoadSimulator(Simulator):
       return False
 
 
-  def viz(self):
-    plt.figure(1)
-    plt.gca().set_xlim([self.boundary[0], self.boundary[2]])
-    plt.gca().set_ylim([self.boundary[1], self.boundary[3]])
-    self.ego_object.viz()
-    self.road.viz()
-    for obj in self.objects:
-      obj.viz()
+  def viz(self, dt):
+    if self.fig_name is None:
+      pass
+    else:
+      plt.figure(self.fig_name)
+      plt.gca().set_xlim([self.boundary[0], self.boundary[2]])
+      plt.gca().set_ylim([self.boundary[1], self.boundary[3]])
+      self.ego_object.viz()
+      self.road.viz()
+      for obj in self.objects:
+        obj.viz()
+      plt.title('world {:.3f}, dt={:.3f}'.format(self.time_acc, dt))
+      plt.legend()
 
     
 

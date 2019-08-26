@@ -33,27 +33,27 @@ from src.fusion.fusion import MultiSensorFusion
 
 # main
 def main():
-  sim = RoadSimulator(gen_mode='constant', object_num=1, obj_mode='keeping')
   
-  sensor_group = SensorGroup(sim)
+  fig_name_1 = "world"
+  fig_name_2 = "logger"
+  plt.figure(fig_name_1, figsize=(20,12))
+  
+  sim = RoadSimulator(gen_mode='constant', object_num=1, obj_mode='keeping', fig_name=fig_name_1)
+  
+  sensor_group = SensorGroup(sim, fig_name=fig_name_1)
+  sensor_group.add(Radar((0,0,0), 50))
   # sensor_group.add(Camera((0,0,0), 10))
   # sensor_group.add(Lidar((0,0,0), 10))
-  sensor_group.add(Radar((0,0,0), 50))
-
-  multi_sensor_filter = MultiSensorFusion(mode='sequential')
-
-  plt.figure(figsize=(20,12))
-
-  log = Logger()
-
-  end_flag = False
-
   dt = sensor_group.get_min_interval()
+
+  multi_sensor_filter = MultiSensorFusion(mode='sequential', fig_name=fig_name_1)
+  
+  log = Logger(fig_name=fig_name_2)
+
   time_acc = 0
 
-  while (not end_flag):
-    objs = sim.simulate(dt)
-    time_acc += dt
+  while (time_acc < 5):
+    objs, time_acc = sim.simulate(dt)
 
     sensor_data = sensor_group.read(objs, time_acc)
 
@@ -62,19 +62,15 @@ def main():
     log.add_timed(time_acc,{'objs':objs, 'sensor_data':sensor_data, 'estimation':estimation})
     log.viz()
     
-    plt.figure(1)
-    plt.title('world {:.3f}, dt={:.3f}'.format(time_acc, dt))
-    plt.legend()
-    plt.pause(0.0001)
-    if time_acc > 5:
-      end_flag = True
-      plt.show()
-    plt.clf()
-    plt.figure(2)
-    plt.clf()
+    display([fig_name_1, fig_name_2])
 
-    
-  
+  plt.show()
+
+def display(fig_names):
+    plt.pause(0.0001)
+    for fig_name in fig_names:
+      plt.figure(fig_name)
+      plt.clf()
 
 if __name__ == "__main__":
   main()

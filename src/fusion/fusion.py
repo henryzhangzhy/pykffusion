@@ -5,6 +5,8 @@ Date:August 23, 2019
 """
 
 # module
+from matplotlib import pyplot as plt
+
 from src.fusion.tracker import Tracker
 from src.fusion.point import Point2D
 from src.fusion.box import Box2D
@@ -24,7 +26,7 @@ class Fusion():
   
 class MultiSensorFusion(Fusion):
   
-  def __init__(self, mode='sequential'):
+  def __init__(self, mode='sequential', fig_name=None):
     print('sequential fusion has the assumption that data come in this batch are of same time stamp, \
       thus make a prediction forward to the same time.')
     super(MultiSensorFusion, self).__init__()
@@ -34,6 +36,7 @@ class MultiSensorFusion(Fusion):
     self.new_proposals = []
     self.estimations = []
     self.max_forget_time = 0.1
+    self.fig_name = fig_name
     
   
   def estimate(self, observations, time_acc):
@@ -144,10 +147,14 @@ class MultiSensorFusion(Fusion):
 
   
   def viz(self):
-    for proposal in self.proposals:
-      proposal.viz()
-    for tracker in self.trackers:
-      tracker.viz()
+    if self.fig_name is None:
+      pass
+    else:
+      plt.figure(self.fig_name)
+      for proposal in self.proposals:
+        proposal.viz()
+      for tracker in self.trackers:
+        tracker.viz()
 
   
 

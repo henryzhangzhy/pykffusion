@@ -15,9 +15,10 @@ import numpy as np
 
 # classes
 class Logger():
-  def __init__(self):
+  def __init__(self, fig_name=None):
     self.unique_data = {}
     self.timed_data = {}
+    self.fig_name = fig_name
   
   def add_unique(self, dic):
     for key, value in dic.items():
@@ -68,11 +69,14 @@ class Logger():
 
 
   def viz(self):
-    plt.figure(2)
-    plt.title('logger visualization')
-    self.plot_error()
+    if self.fig_name is None:
+      pass
+    else:
+      plt.figure(self.fig_name)
+      plt.title('logger visualization')
+      self.plot_error()
 
-    plt.legend()
+      plt.legend()
     
     
 

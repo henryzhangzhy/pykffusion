@@ -5,17 +5,18 @@ Date:August 22, 2019
 """
 
 # module
-
+from matplotlib import pyplot as plt
 
 # parameters
 
 
 # classes
 class SensorGroup():
-  def __init__(self, simulator):
+  def __init__(self, simulator, fig_name=None):
     self.sim = simulator
     self.sensor_group = []
     self.sensor_data = []
+    self.fig_name = fig_name
   
   def add(self, sensor):
     self.sensor_group.append(sensor)
@@ -40,8 +41,12 @@ class SensorGroup():
 
 
   def viz(self):
-    for sensor in self.sensor_group:
-      sensor.viz()
+    if self.fig_name is None:
+      pass
+    else:
+      plt.figure(self.fig_name)
+      for sensor in self.sensor_group:
+        sensor.viz()
 
 # functions
 
