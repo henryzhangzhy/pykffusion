@@ -35,15 +35,16 @@ class Tracker():
   
   def initialize(self, proposal):
     self.update_time = proposal.time
+    self.predict_time = proposal.time
     return proposal.get_model()
 
   def predict(self, time_acc):
-    self.model.predict(time_acc - self.update_time)
+    self.model.predict(time_acc - self.predict_time)
     self.estimate = Estimation(self.id, \
                                self.model.filter.x_pre, \
                                self.model.filter.P_pre, \
                                self.model.filter.innovation)
-    self.update_time = time_acc
+    self.predict_time = time_acc
   
   def update(self):
     if not self.observation is None:
@@ -52,6 +53,12 @@ class Tracker():
                                  self.model.filter.x_post, \
                                  self.model.filter.P_post, \
                                  self.model.filter.innovation)
+      self.update_time = self.predict_time
+    else:
+      pass
+    
+    self.observation = None
+    
   
   def associate(self, proposal):
     ''' associate track and proposal, return True if success and update observation, False if not associated '''

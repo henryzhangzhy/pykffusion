@@ -18,7 +18,6 @@ class Proposal():
   
   def get_model(self):
     self.model.generate_filter()
-    # model.filter.update_time = self.time
     return self.model
 
   def viz(self):

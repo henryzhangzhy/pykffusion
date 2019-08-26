@@ -57,7 +57,7 @@ def main():
 
     sensor_data = sensor_group.read(objs, time_acc)
 
-    estimation = multi_sensor_filter.estimate(sensor_data)
+    estimation = multi_sensor_filter.estimate(sensor_data, time_acc)
     
     log.add_timed(time_acc,{'objs':objs, 'sensor_data':sensor_data, 'estimation':estimation})
     log.viz()

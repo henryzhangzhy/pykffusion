@@ -15,7 +15,8 @@
 - [x] add virtual sensor (use radar center mode instead)
 - [x] add visualization to kalman filter
 - [x] add log to kalman filter
-- [ ] correct point model
+- [x] correct point model
+- [x] added forget time
 - [ ] add more radar to test multi sensor
 - [ ] add lidar model
 - [ ] add camera model
