@@ -1,7 +1,7 @@
 # Python implementation of the multi sensor fusion using the Kalman Filter
 
 ## Release
-- version 0.1.1
+- version 0.1.1 (branched off from master)
   - single sensor single object tracking
   - correct motion model
   - cleaner main loop
