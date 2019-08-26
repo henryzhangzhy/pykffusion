@@ -51,8 +51,9 @@ def main():
   log = Logger(fig_name=fig_name_2)
 
   time_acc = 0
+  end_flag = False
 
-  while (time_acc < 5):
+  while (end_flag == False):
     objs, time_acc = sim.simulate(dt)
 
     sensor_data = sensor_group.read(objs, time_acc)
@@ -62,15 +63,22 @@ def main():
     log.add_timed(time_acc,{'objs':objs, 'sensor_data':sensor_data, 'estimation':estimation})
     log.viz()
     
-    display([fig_name_1, fig_name_2])
+    end_flag = (time_acc > 5)
+    display([fig_name_1, fig_name_2], end_flag)
 
   plt.show()
 
-def display(fig_names):
-    plt.pause(0.0001)
+def display(fig_names, end_flag):
     for fig_name in fig_names:
-      plt.figure(fig_name)
-      plt.clf()
+        plt.figure(fig_name)
+        plt.legend()
+    plt.pause(0.0001)
+    if end_flag:
+      return
+    else:
+      for fig_name in fig_names:
+        plt.figure(fig_name)
+        plt.clf()
 
 if __name__ == "__main__":
   main()

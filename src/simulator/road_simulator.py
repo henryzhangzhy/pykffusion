@@ -153,7 +153,6 @@ class RoadSimulator(Simulator):
       for obj in self.objects:
         obj.viz()
       plt.title('world {:.3f}, dt={:.3f}'.format(self.time_acc, dt))
-      plt.legend()
 
     
 
