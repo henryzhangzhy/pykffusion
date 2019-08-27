@@ -44,6 +44,7 @@ class MultiSensorFusion(Fusion):
     estimations = self.fusion_module(proposals)
 
     self.clean_track(time_acc)
+    self.merge_trackers()
     self.viz()
 
     return estimations
@@ -144,6 +145,35 @@ class MultiSensorFusion(Fusion):
         del tracker
     
     self.trackers = new_trackers
+  
+  def merge_trackers(self):
+    merge_pair = []
+    for tracker_i in self.trackers:
+      for tracker_j in self.trackers:
+        if not (tracker_i is tracker_j):
+          if tracker_i.is_close(tracker_j):
+            merge_pair.append((tracker_i,tracker_j))
+            break
+    if len(merge_pair) != 0:
+      self.merge_two_trackers(merge_pair[0])
+      self.merge_trackers()
+    else:
+      return
+  
+  def merge_two_trackers(self, pair):
+    new_trackers = []
+    
+    for tracker in self.trackers:
+      if (not tracker is pair[0]) and (not tracker is pair[1]):
+        new_trackers.append(tracker)
+    
+    merged_tracker = pair[0].merge(pair[1])
+    new_trackers.append(merged_tracker)
+
+    self.trackers = new_trackers
+
+
+
 
   
   def viz(self):

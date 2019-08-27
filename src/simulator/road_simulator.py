@@ -44,11 +44,12 @@ class RoadSimulator(Simulator):
     self.road = Road(start=(0,0,0), end=(100,0,0), lane_num=1, lane_width=self.lane_width)
     self.fig_name = fig_name
     self.time_acc = 0
+    self.velocity_max = 20
+    self.velocity_gen = self.velocity_max
   
 
   def simulate(self, dt):
     self.clean_objects()
-    
     self.generate_objects()
 
     self.ego_object.simulate(dt)
@@ -58,11 +59,9 @@ class RoadSimulator(Simulator):
         obj.simulate(dt)
     
     self.update_boundary()
-    
     self.viz(dt)
 
     objs = self.get_objects(self.ego_object.pos)
-
     self.time_acc += dt
 
     return objs, self.time_acc
@@ -85,31 +84,41 @@ class RoadSimulator(Simulator):
 
   def generate_objects(self):
     """ generate objects at the boundary """
-    if self.gen_mode == 'constant':
-      self.generate_objects_constant()
-    elif self.gen_mode == 'random':
-      self.generate_objects_random()
-  
-
-  def generate_objects_constant(self):
-    if len(self.objects) < self.object_num:
-      self.generate_an_object()
-  
-
-  def generate_objects_random(self):
-    if random.random() < self.gen_prob:
-      self.generate_an_object()
-  
-
-  def generate_an_object(self):
+    self.get_max_velocity()
     pos, orientation = self.get_generating_point()
+    for obj in self.objects:
+      if obj.is_distance_safe(pos) == False:
+        return
+    
+    if self.gen_mode == 'constant':
+      self.generate_objects_constant(pos, orientation)
+    elif self.gen_mode == 'random':
+      self.generate_objects_random(pos, orientation)
+
+  def get_max_velocity(self):
+    if len(self.objects) > 0:
+      self.velocity_gen = min(self.velocity_max, min([obj.v for obj in self.objects]))
+    else:
+      self.velocity_gen = self.velocity_max
+
+  def generate_objects_constant(self, pos, orientation):
+    if len(self.objects) < self.object_num:
+      self.generate_an_object(pos, orientation)
+  
+
+  def generate_objects_random(self, pos, orientation):
+    if random.random() < self.gen_prob:
+      self.generate_an_object(pos, orientation)
+  
+
+  def generate_an_object(self, pos, orientation):
     mode = 'constant acceleration'
     
     if self.obj_mode == 'static':
       v = 0
       a = 0
     elif self.obj_mode == 'keeping':
-      v = random.randint(0,10)
+      v = random.randint(0,self.velocity_gen)
       a = 0
     elif self.obj_mode == 'accelerating':
       v = 0

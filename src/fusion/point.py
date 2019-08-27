@@ -39,8 +39,8 @@ class Point2D():
                                [0, 0, 0, 0, 0, 1]])
     observation_matrix = np.eye(state.shape[0])
     control_matrix = 0
-    process_noise = np.diag([0.1, 0.1, 0.1, 0.1, 0.1, 0.1])
-    observation_noise = np.diag([0.1, 0.1, 0.5, 0.5, 1.0, 1.0])
+    process_noise = np.diag([0.5, 0.5, 1.0, 1.0, 1.0, 1.0])
+    observation_noise = np.diag([4.0, 4.0, 1.5, 1.5, 1.0, 1.0])
     
     self.filter = KalmanFilter(x_prior=state, \
                         P_prior=variance, \

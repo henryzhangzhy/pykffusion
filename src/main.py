@@ -38,10 +38,13 @@ def main():
   fig_name_2 = "logger"
   plt.figure(fig_name_1, figsize=(20,12))
   
-  sim = RoadSimulator(gen_mode='constant', object_num=1, obj_mode='keeping', fig_name=fig_name_1)
+  sim = RoadSimulator(gen_mode='constant', object_num=5, obj_mode='keeping', fig_name=fig_name_1)
   
   sensor_group = SensorGroup(sim, fig_name=fig_name_1)
-  sensor_group.add(Radar((0,0,0), 50))
+  
+  
+  sensor_group.add(Radar((-15,0,0), 50))
+  sensor_group.add(Radar((15,0,0), 50))
   # sensor_group.add(Camera((0,0,0), 10))
   # sensor_group.add(Lidar((0,0,0), 10))
   dt = sensor_group.get_min_interval()

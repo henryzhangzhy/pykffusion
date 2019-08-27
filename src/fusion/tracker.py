@@ -7,6 +7,8 @@ Date:August 23, 2019
 # module
 import math
 import matplotlib.pyplot as plt
+import numpy as np
+np.set_printoptions(precision=3)
 
 from src.fusion.kalman_filter import KalmanFilter
 from src.fusion.point import Point2D
@@ -22,6 +24,13 @@ class Estimation():
     self.state = state
     self.variance = variance
     self.innovation = innovation
+  
+  def is_close(self, estimate):
+    state_diff = self.state - estimate.state
+    diff_norm = np.linalg.norm(state_diff)
+    print("diff_norm", diff_norm, self.id, estimate.id, state_diff)
+    print(self.state, estimate.state)
+    return diff_norm < 2
 
 class Tracker():
   def __init__(self, proposal):
@@ -70,6 +79,18 @@ class Tracker():
       self.observation = None
       return False
   
+  def is_close(self, tracker):
+    return self.estimate.is_close(tracker.estimate)
+  
+  def merge(self, tracker):
+    ''' return the one with a smaller innovation '''
+    norm_self = np.linalg.norm(self.estimate.innovation)
+    norm_else = np.linalg.norm(tracker.estimate.innovation)
+    if norm_self < norm_else:
+      return self
+    else:
+      return tracker
+  
   def viz(self):
     plt.scatter(self.estimate.state[0], \
                 self.estimate.state[1], \
@@ -79,6 +100,8 @@ class Tracker():
              'Tid:{:d}, v:({:.1f}, {:.1f})'.format(self.id, \
                                                    self.estimate.state[2], \
                                                    self.estimate.state[3]))
+                    
+  
     
 # functions
 

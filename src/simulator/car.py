@@ -139,6 +139,18 @@ class Car():
     return CarObject(close_point, other_points, self.v, self.orientation, self.pos, self.id)
 
 
+  def is_distance_safe(self, pos):
+    ''' safety distance is set to be 1 m '''
+    # assume that cars are of the same width and length
+    safety_distance = 1
+    if self.pos[0] - (self.l + safety_distance) > pos[0] or \
+       self.pos[0] + (self.l + safety_distance) < pos[0] or \
+       self.pos[1] - (self.w + safety_distance) > pos[1] or \
+       self.pos[1] + (self.w + safety_distance) < pos[1]:
+      return True
+    else:
+      return False
+       
   
 
   def viz(self):
