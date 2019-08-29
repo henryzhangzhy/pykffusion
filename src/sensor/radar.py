@@ -48,6 +48,7 @@ class Radar(Sensor):
         point = obj.close_point
       elif (self.mode == 'center'):
         point = obj.pos
+
       point_ds = math.hypot( point[0] - self.abs_pos[0], point[1] - self.abs_pos[1])
       point_theta = math.atan2( point[1] - self.abs_pos[1],  point[0] - self.abs_pos[0])
       ds = point_ds + random.gauss(0, self.variance_distance)
@@ -62,13 +63,13 @@ class Radar(Sensor):
       
       sensor_data.append(RadarData(x, y, vx, vy, obj.id))
     
-    self.sensor_data = SensorData(self.type, time_acc, sensor_data)
-
-    return self.sensor_data
+    self.data = SensorData(self.type, time_acc, sensor_data)
+    return self.data
   
   def viz(self):
-    x = [data.x for data in self.sensor_data.data]
-    y = [data.y for data in self.sensor_data.data]
+    x = [data.x for data in self.data.data]
+    y = [data.y for data in self.data.data]
+    
     plt.scatter(x, y, c='g', label='radar {}'.format(self.mode))
 
 
