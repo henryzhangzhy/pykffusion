@@ -22,6 +22,11 @@ class CarObject():
     self.orientation = orientation
     self.pos = pos
     self.id = obj_id
+  
+  def viz(self):
+    plt.scatter(self.close_point[0], self.close_point[1], c='r', marker='*', label='close point')
+    for point in self.other_points:
+      plt.scatter(point[0], point[1], c='g', marker='P', label='other points')
 
 
 class Car():
@@ -122,13 +127,16 @@ class Car():
     close_distance = math.inf
     close_index = -1
     far_index = -1
-    far_distance = 0
+    far_distance = (0, 0)
     for idx, point in enumerate(corners):
       distance = math.hypot(point[0] - pos[0], point[1] - pos[1])
       if (distance < close_distance):
         close_point = point
         close_index = idx
         close_distance = distance
+    for idx, point in enumerate(corners):
+      distance = (math.hypot(point[0] - pos[0], point[1] - pos[1]), \
+                  math.hypot(close_point[0] - point[0], close_point[1] - point[1]))
       if (distance > far_distance):
         far_index = idx
         far_distance = distance
