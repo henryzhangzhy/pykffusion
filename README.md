@@ -14,6 +14,15 @@
 
 ## TODO
 
+- [ ] add lidar model
+  - [x] generating lidar data
+  - [ ] proposal generation based on lidar
+- [ ] add box model
+- [ ] add camera model
+- [ ] collision detection
+- [ ] occlusion
+- [ ] adding delayed data
+- [ ] adding asquent data
 - [x] add moving to ego vehilcle
 - [x] add text display
 - [x] add radar model
@@ -23,23 +32,15 @@
 - [x] correct point model
 - [x] added forget time
 - [x] allow turn on or off one view. (By set fig_name to None)
-- [ ] add more radar to test multi sensor
+- [x] add more radar to test multi sensor
   - [x] fix merging similar track
   - [x] sensor order matters, figure out why? (updated in blog[1])
-- [ ] add lidar model
-  - [x] generating lidar data
-  - [ ] proposal generation based on lidar
-- [ ] add box model
-- [ ] add camera model
 - [x] add kalman filter
 - [x] add data association
-- [ ] multi object generation
+- [x] multi object generation
   - [x] add speed limit
   - [x] add collision detection for generating object
-- [ ] collision detection
-- [ ] occlusion
-- [ ] adding delayed data
-- [ ] adding asquent data
+
 
 Reference
 
