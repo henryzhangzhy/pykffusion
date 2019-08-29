@@ -27,6 +27,8 @@
   - [x] fix merging similar track
   - [x] sensor order matters, figure out why? (updated in blog[1])
 - [ ] add lidar model
+  - [x] generating lidar data
+  - [ ] proposal generation based on lidar
 - [ ] add box model
 - [ ] add camera model
 - [x] add kalman filter
