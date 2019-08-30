@@ -23,6 +23,7 @@ class Line():
     self.c = c
     self.points = points
     self.vertices = vertices
+    self.type = 'line'
   
   @ classmethod
   def find_line(cls, points):
@@ -51,8 +52,10 @@ class Line():
         if line_points_num > line_points_num_max:
           line_points_num_max = line_points_num
           line_max_support = line
+        # print(line)
+        # print(line_points_num, points[idx_pair[0]], points[idx_pair[1]], idx_pair[0], idx_pair[1])
     line_max_support.update_vertices()
-    return line_max_support, line_points_num_max > len(points)
+    return line_max_support, line_points_num_max >= len(points) / 2
   
   @ classmethod
   def find_line_two_point(cls, pt1, pt2):
@@ -62,9 +65,9 @@ class Line():
       dx = pt2[0] - pt1[0] 
       dy = pt2[1] - pt1[1]
       if dx == 0:
-        return Line(a=1, b=0, c=pt1[0], points=[pt1, pt2], vertices=[pt1, pt2])
+        return Line(a=1, b=0, c=-pt1[0], points=[pt1, pt2], vertices=[pt1, pt2])
       elif dy == 0:
-        return Line(a=0, b=1, c=pt1[1], points=[pt1, pt2], vertices=[pt1, pt2])
+        return Line(a=0, b=1, c=-pt1[1], points=[pt1, pt2], vertices=[pt1, pt2])
       else:
         c = dy * pt1[0] - dx * pt1[1]
         return Line(a=-dy, b=dx, c=c, points=[pt1, pt2], vertices=[pt1, pt2])
@@ -81,13 +84,32 @@ class Line():
     
   def is_close(self, point, threshold):
     distance = self.distance(point)
+    # print(distance, threshold, point)
     if distance < threshold:
       return True
     else:
       return False
   
   def distance(self, point):
-    return (self.a * point[0] + self.b * point[1] + self.c) / math.hypot(self.a, self.b)
+    return abs(self.a * point[0] + self.b * point[1] + self.c) / math.hypot(self.a, self.b)
+  
+  def find_intersect(self, other):
+    ''' find the intersection point of line self and line other, None if not '''
+    if (self.a * other.b == self.b * other.a != 0) or \
+       (self.a == other.a == 0 or self.b == other.b == 0) or \
+       (self.a == self.b == 0 or other.a == other.b == 0):
+      # three type of non intersect 1. parallel non zero a,b, 2. parallel zero a or b, 3 not a line.
+      return None
+    else:
+      if self.a == 0 and other.b == 0:
+        return (-other.c/other.a, -self.c/self.b)
+      elif self.b == 0 and other.a == 0:
+        return (-self.c/self.a, -other.c/other.b)
+      else:
+        dinominator = (self.a * other.b - other.a * self.b)
+        x = (self.b * other.c - other.b * self.c) / dinominator
+        y = (self.a * other.c - other.a * self.c) / -dinominator
+        return (x, y)
   
   def update_vertices(self):
     if abs(self.a) >= abs(self.b):
