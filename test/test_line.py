@@ -54,6 +54,49 @@ class Test_Line():
     line_1 = Line.find_line_two_point(self.points_1[0], self.points_1[1])
     assert line_1.distance((0.0, 0.0)) == 0
     assert abs(line_1.distance((0.0, 1.0)) - np.sqrt(2)/2) < 0.00001
+
+  def test_find_intersect(self):
+    line_1 = Line.find_line_two_point(self.points_1[0], self.points_1[1])
+    line_2 = Line.find_line_two_point(self.points_2[0], self.points_2[1])
+    line_3 = Line.find_line_two_point(self.points_3[0], self.points_3[1])
+    line_4 = Line.find_line_two_point(self.points_4[0], self.points_4[1])
+    assert line_1.find_intersect(line_2) == (0,0)
+    assert line_2.find_intersect(line_3) == (0,0)
+    assert line_3.find_intersect(line_4) == None
+    assert line_4.find_intersect(line_1) == None
+    assert line_1.find_intersect(line_3) == (0,0)
+    assert line_1.find_intersect(line_4) == None
+    assert line_2.find_intersect(line_4) == None
+
+class Test_Line_Integration():
+  from src.simulator.car import Car
+  from src.sensor.lidar import Lidar, LidarData
+
+  ego_pos = [0,0,0]
+  car = Car([10,5,0], 0, 0, 0)
+  objs = [car.get_object(ego_pos)]
+  lidar = Lidar((0,0,0), 10, 0, abs_pos=ego_pos)
+  sensor_data = lidar.read(objs, 0)
+  scan = sensor_data.data[0].scan
+
+  def test_find_line(self):
+    plt.figure(1,figsize=(20,12))
+    print(self.scan)
+    line_feature_1, is_line_1 = Line.find_line(self.scan)
+    print(line_feature_1)
+    print(is_line_1)
+    self.lidar.viz()
+    line_feature_1.viz()
+    _, points_far = line_feature_1.find_points_close_line(self.scan, line_feature_1.close_threshold)
+    plt.figure(2)
+    self.lidar.viz()
+    plt.scatter([point[0] for point in points_far], [point[1] for point in points_far], marker='o', c='r', label='far')
+    plt.legend()
+    plt.show()
+    line_feature_2, is_line_2 = Line.find_line(points_far)
+    
+    line_feature_2.viz()
+    
 # functions
 
 
