@@ -17,6 +17,10 @@
 - [ ] add lidar model
   - [x] generating lidar data
   - [ ] proposal generation based on lidar
+    - [x] use ransac to find a line
+    - [x] find intersection of lines
+    - [x] return corner feature
+    - [ ] generate proposals based on features
 - [ ] add box model
 - [ ] add camera model
 - [ ] collision detection
