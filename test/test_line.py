@@ -20,6 +20,8 @@ class Test_Line():
   points_3 = [(0.0, 0.0), (1.0, 0.0)]
   points_4 = [(0.0, 0.0), (0.0, 0.0)]
   points_5 = [(0.0, 0.0), (1.0, 1.0), (2.0, 2.0)]
+  points_6 = [(8.0, 1.0), (8.0, 3.0)]
+  point_other_1 = (8.0, 2.0)
 
   def test_find_line_two_points(self):
     line_1 = Line.find_line_two_point(self.points_1[0], self.points_1[1])
@@ -30,6 +32,10 @@ class Test_Line():
     print(line_3)
     line_4 = Line.find_line_two_point(self.points_4[0], self.points_4[1])
     print(line_4)
+    line_6 = Line.find_line_two_point(self.points_6[0], self.points_6[1])
+    assert line_6.a == 1
+    assert line_6.b == 0
+    assert line_6.c == -self.points_6[0][0]
   
   def test_viz(self):
     plt.figure(figsize=(20,10))
@@ -52,8 +58,10 @@ class Test_Line():
   
   def test_distance(self):
     line_1 = Line.find_line_two_point(self.points_1[0], self.points_1[1])
+    line_6 = Line.find_line_two_point(self.points_6[0], self.points_6[1])
     assert line_1.distance((0.0, 0.0)) == 0
     assert abs(line_1.distance((0.0, 1.0)) - np.sqrt(2)/2) < 0.00001
+    assert line_6.distance(self.point_other_1) == 0
 
   def test_find_intersect(self):
     line_1 = Line.find_line_two_point(self.points_1[0], self.points_1[1])
