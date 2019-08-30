@@ -11,6 +11,7 @@ from src.fusion.tracker import Tracker
 from src.fusion.point import Point2D
 from src.fusion.box import Box2D
 from src.fusion.proposal import Proposal
+from src.sensor.lidar_proc import LidarProc
 
 # parameters
 
@@ -69,6 +70,16 @@ class MultiSensorFusion(Fusion):
       for obs in observations.data:
         proposal = Proposal(observations.time, Point2D(obs.x, obs.y, obs.vx, obs.vy, obs.id))
         proposals.append(proposal)
+    elif observations.type == 'Lidar':
+      for obs in observations.data:
+        models = LidarProc.find_models(observations.time, obs)
+        for model in models:
+          proposal = Proposal(observations.time, model)
+          proposals.append(proposal)
+    elif observations.type == 'Camera':
+      raise NotImplementedError
+    else:
+      raise NotImplementedError
 
     return proposals
 
