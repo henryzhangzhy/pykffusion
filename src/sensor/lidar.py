@@ -43,18 +43,15 @@ class Lidar(Sensor):
     visible_edges = []
     for point_i in obj.other_points:
       edge_i = self.create_edge(self.abs_pos, point_i)
-      print('edge_i', edge_i, end=' ')
       is_free = True
       for point_j in obj.other_points:
         if not point_j is point_i:
           edge_j = self.create_edge(obj.close_point, point_j)
-          print('edge_j', edge_j, self.is_intersect(edge_i, edge_j))
           if self.is_intersect(edge_i, edge_j):
             is_free = False
       if is_free:
         visible_edges.append((obj.close_point, point_i))
 
-    print(visible_edges)
     return visible_edges
   
   def is_intersect(self, edge_1, edge_2):
