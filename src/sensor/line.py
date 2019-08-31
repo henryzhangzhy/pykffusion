@@ -111,6 +111,13 @@ class Line():
         y = (self.a * other.c - other.a * self.c) / -dinominator
         return (x, y)
   
+  def find_perpendicular_vector(self):
+    norm = math.hypot(self.a, self.b)
+    if norm != 0:
+      return (self.a / norm, self.b / norm)
+    else:
+      return None
+  
   def update_vertices(self):
     if abs(self.a) >= abs(self.b):
       i, j = 1, 0
