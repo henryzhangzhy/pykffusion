@@ -32,6 +32,17 @@ class Test_LidarProc():
     feature.viz()
     # self.lidar.viz()
     plt.pause(2)
+    plt.close()
+  
+  def test_find_model_from_feature(self):
+    plt.figure(figsize=(20,12))
+    feature = LidarProc.find_feature(self.data.scan)
+    feature.viz()
+    models = LidarProc.find_models_from_feature(feature, self.data.sensor_pos)
+    print(models)
+    for model in models:
+      model.viz()
+    plt.pause(2)
 
 # functions
 
