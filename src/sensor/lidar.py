@@ -19,7 +19,7 @@ class LidarData():
     ''' scan represents the points of an object '''
     self.id = obj_id
     self.scan = scan
-    self.sensor_pos
+    self.sensor_pos = sensor_pos
 
 class Lidar(Sensor):
   def __init__(self, rel_pos=(0,0,0), frequency=10, orientation=0, abs_pos=[0,0,0], angle_resolution=math.pi/180/4):
