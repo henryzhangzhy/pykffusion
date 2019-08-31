@@ -15,10 +15,11 @@ from src.sensor.sensor import Sensor, SensorData
 
 # classes
 class LidarData():
-  def __init__(self, obj_id, scan):
+  def __init__(self, obj_id, scan, sensor_pos):
     ''' scan represents the points of an object '''
     self.id = obj_id
     self.scan = scan
+    self.sensor_pos
 
 class Lidar(Sensor):
   def __init__(self, rel_pos=(0,0,0), frequency=10, orientation=0, abs_pos=[0,0,0], angle_resolution=math.pi/180/4):
@@ -34,7 +35,7 @@ class Lidar(Sensor):
     for obj in objs:
       visible_edges = self.find_visible_edges(obj)
       scan = self.find_scan(visible_edges)
-      sensor_data.append(LidarData(obj.id, scan))
+      sensor_data.append(LidarData(obj.id, scan, self.abs_pos))
     
     self.data = SensorData('Lidar', time_acc, sensor_data)
     return self.data
