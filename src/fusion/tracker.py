@@ -33,19 +33,21 @@ class Estimation():
     return diff_norm < 2
 
 class Tracker():
-  def __init__(self, proposal):
-    self.model = self.initialize(proposal)
+  def __init__(self, time, model):
+    self.model = self.initialize(time, model)
     self.observation = None
     self.id = self.model.id
     self.estimate = Estimation(self.id, \
                                self.model.filter.x_post, \
                                self.model.filter.P_post, \
                                self.model.filter.innovation)
+    self.threshold_associate = 2
   
-  def initialize(self, proposal):
-    self.update_time = proposal.time
-    self.predict_time = proposal.time
-    return proposal.get_model()
+  def initialize(self, time, model):
+    self.update_time = time
+    self.predict_time = time
+    model.generate_filter()
+    return model 
 
   def predict(self, time_acc):
     self.model.predict(time_acc - self.predict_time)
@@ -67,13 +69,21 @@ class Tracker():
       pass
     
     self.observation = None
-    
   
-  def associate(self, proposal):
+  def find_associate_score(self, model):
     ''' associate track and proposal, return True if success and update observation, False if not associated '''
-    threshold = 2
-    if math.hypot(proposal.model.x - self.estimate.state[0], proposal.model.y - self.estimate.state[1]) < threshold:
-      self.observation = proposal.model.generate_observation()
+    threshold = self.threshold_associate
+    score = math.hypot(model.x - self.estimate.state[0], model.y - self.estimate.state[1])
+    if score < threshold:
+      return score
+    else:
+      return None
+  
+  def associate(self, model):
+    ''' associate track and proposal, return True if success and update observation, False if not associated '''
+    threshold = self.threshold_associate
+    if math.hypot(model.x - self.estimate.state[0], model.y - self.estimate.state[1]) < threshold:
+      self.observation = model.generate_observation()
       return True
     else:
       self.observation = None
