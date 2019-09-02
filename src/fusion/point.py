@@ -28,7 +28,6 @@ class Point2D():
     self.id = obj_id
   
   def generate_filter(self):
-    print('There might be huge problem in this model')
     state = np.array([self.x, self.y, self.vx, self.vy, self.ax, self.ay])
     variance = np.diag([0.1, 0.1, 0.5, 0.5, 1.0, 1.0])
     transition_matrix = np.array([[1, 0, 0, 0, 0, 0],
