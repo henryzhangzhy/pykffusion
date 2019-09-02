@@ -14,14 +14,11 @@
 
 ## TODO
 
-- [ ] add lidar model
-  - [x] generating lidar data
-  - [ ] proposal generation based on lidar
-    - [x] use ransac to find a line
-    - [x] find intersection of lines
-    - [x] return corner feature
-    - [ ] generate proposals based on features
-- [ ] add box model
+- [ ] multi modal fusion logic
+  - [ ] merge multi modal data
+  - [ ] multi modal association
+  - [ ] multi modal update
+  - [ ] model conversion
 - [ ] add camera model
 - [ ] collision detection
 - [ ] occlusion
@@ -44,7 +41,14 @@
 - [x] multi object generation
   - [x] add speed limit
   - [x] add collision detection for generating object
-
+- [x] add lidar model
+  - [x] generating lidar data
+  - [x] proposal generation based on lidar
+    - [x] use ransac to find a line
+    - [x] find intersection of lines
+    - [x] return corner feature
+    - [x] generate proposals based on features
+- [x] add box model
 
 Reference
 
