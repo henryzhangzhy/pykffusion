@@ -12,16 +12,13 @@ Date:August 23, 2019
 
 # classes
 class Proposal():
-  def __init__(self, time, model):
+  def __init__(self, time, models):
     self.time = time
-    self.model = model
-  
-  def get_model(self):
-    self.model.generate_filter()
-    return self.model
+    self.models = models
 
   def viz(self):
-    self.model.viz()
+    for model in self.models:
+      model.viz()
 # functions
 
 
