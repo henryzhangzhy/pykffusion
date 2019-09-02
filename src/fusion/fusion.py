@@ -68,14 +68,13 @@ class MultiSensorFusion(Fusion):
 
     if observations.type == 'Radar':
       for obs in observations.data:
-        proposal = Proposal(observations.time, Point2D(obs.x, obs.y, obs.vx, obs.vy, obs.id))
+        proposal = Proposal(observations.time, [Point2D(obs.x, obs.y, obs.vx, obs.vy, obs.id)])
         proposals.append(proposal)
     elif observations.type == 'Lidar':
       for obs in observations.data:
         models = LidarProc.find_models(observations.time, obs)
-        for model in models:
-          proposal = Proposal(observations.time, model)
-          proposals.append(proposal)
+        proposal = Proposal(observations.time, models)
+        proposals.append(proposal)
     elif observations.type == 'Camera':
       raise NotImplementedError
     else:
@@ -127,19 +126,31 @@ class MultiSensorFusion(Fusion):
     new_proposals = []
     
     for proposal in proposals:
-      matched = False
-      for tracker in self.trackers:
-        if tracker.associate(proposal) == True:
-          matched = True
-      if matched == False:
+      matched_pairs = self.find_best_associate_pair(proposal)
+      if len(matched_pairs) > 0:
+        matched_pairs[0].associate(matched_pairs[1])
+      else:
         new_proposals.append(proposal)
-    
+
     self.new_proposals = new_proposals
+
+  def find_best_associate_pair(self, proposal):
+    pairs = []
+    for model in proposal.models:
+      for tracker in self.trackers:
+        score = tracker.find_associate_score(model)
+        if not score is None:
+          pairs.append((score, tracker, model))
+    if len(pairs) == 0:
+      return []
+    else:
+      return (pairs[0][1], pairs[0][2])
   
   def initialize(self):
     for proposal in self.new_proposals:
-      tracker = Tracker(proposal)
-      self.trackers.append(tracker)
+      for model in proposal.models:
+        tracker = Tracker(proposal.time, model)
+        self.trackers.append(tracker)
   
   def update(self):
     for tracker in self.trackers:
