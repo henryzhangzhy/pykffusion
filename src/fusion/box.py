@@ -47,8 +47,13 @@ class Box2D():
                         noise_process=process_noise, \
                         noise_observation=observation_noise)
 
-  def generate_observation(self):
-    return np.array([self.x, self.y, self.v, self.a, self.orientation, self.yaw_rate, self.l, self.w ])
+  def generate_observation(self, target_type='Box'):
+    if target_type == self.type:
+      return np.array([self.x, self.y, self.v, self.a, self.orientation, self.yaw_rate, self.l, self.w ])
+    elif target_type == 'point':
+      theta_cos = np.cos(self.orientation)
+      theta_sin = np.sin(self.orientation)
+      return np.array([self.x, self.y, self.v*theta_cos, self.v*theta_sin, self.a*theta_cos, self.a*theta_sin])
   
   def predict(self, dt):
     self.update_mtx_transition(dt)
@@ -74,6 +79,10 @@ class Box2D():
                        [0, 0,     0,              0,          0,                   0, 1, 0], 
                        [0, 0,     0,              0,          0,                   0, 0, 1]])
     self.filter.mtx_transition = matrix
+  
+  def get_orientation(self):
+    orientation = self.orientation
+    return orientation
   
   def viz(self):
     outline = get_box_outline(self.x, self.y, self.orientation, self.l, self.w)

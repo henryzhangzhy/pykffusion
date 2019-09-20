@@ -7,6 +7,7 @@ Date:August 23, 2019
 # module
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 
 from src.fusion.kalman_filter import KalmanFilter
 
@@ -49,8 +50,14 @@ class Point2D():
                         noise_process=process_noise, \
                         noise_observation=observation_noise)
   
-  def generate_observation(self):
-    return np.array([self.x, self.y, self.vx, self.vy, self.ax, self.ay])
+  def generate_observation(self, target_type='Point'):
+    if target_type == self.type:
+      return np.array([self.x, self.y, self.vx, self.vy, self.ax, self.ay])
+    elif target_type == 'Box':
+      orientation = math.atan2(self.vy, self.vx)
+      v = math.hypot(self.vx, self.vy)
+      a = math.hypot(self.ax, self.ay)
+      return np.array([self.x, self.y, v, a, orientation, 0, 0, 0])
   
   def predict(self, dt):
     self.update_mtx_transition(dt)
@@ -67,6 +74,10 @@ class Point2D():
                        [0, 0, 0, 0, 1, 0],
                        [0, 0, 0, 0, 0, 1]])
     self.filter.mtx_transition = matrix
+  
+  def get_orientation(self):
+    orientation = math.atan2(self.vy, self.vx)
+    return orientation
   
   def viz(self):
     plt.scatter(self.x, self.y, c='y', marker='o', label='proposal')
