@@ -13,6 +13,7 @@ np.set_printoptions(precision=3)
 from src.fusion.kalman_filter import KalmanFilter
 from src.fusion.point import Point2D
 from src.fusion.box import Box2D
+from src.util.utils import is_angle_match
 
 # parameters
 
@@ -71,10 +72,11 @@ class Tracker():
     self.observation = None
   
   def find_associate_score(self, model):
-    ''' associate track and proposal, return True if success and update observation, False if not associated '''
+    ''' associate track and proposal, return score if success and update observation, None if not associated '''
     threshold = self.threshold_associate
     score = math.hypot(model.x - self.estimate.state[0], model.y - self.estimate.state[1])
-    if score < threshold:
+    b_angle_match = is_angle_match(model.get_orientation(), self.model.get_orientation())
+    if score < threshold and b_angle_match:
       return score
     else:
       return None
@@ -83,7 +85,7 @@ class Tracker():
     ''' associate track and proposal, return True if success and update observation, False if not associated '''
     threshold = self.threshold_associate
     if math.hypot(model.x - self.estimate.state[0], model.y - self.estimate.state[1]) < threshold:
-      self.observation = model.generate_observation()
+      self.observation = model.generate_observation(self.model.type)
       return True
     else:
       self.observation = None

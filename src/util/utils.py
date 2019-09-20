@@ -47,6 +47,22 @@ def get_box_outline(x, y, orientation, l, w):
   outline.append( ( (x, corners[4][0]), (y, corners[4][1]) ) )
   return outline
 
+def align_angle(a1, a2):
+  ''' align a2 to [a1 - pi, a1 + pi] '''
+  while a2 - a1 > math.pi:
+    a2 -= math.pi * 2
+  while a1 - a2 > math.pi:
+    a2 += math.pi * 2
+  return a2
+
+def is_angle_match(a1, a2):
+  ''' return True if a1 is within (a2 - pi/4, a2 + pi/4) '''
+  a2 = align_angle(a1, a2)
+  if a2 - math.pi / 4 < a1 < a2 + math.pi / 4:
+    return True
+  else:
+    return False
+
 
 # main
 def main():
