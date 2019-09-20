@@ -113,9 +113,9 @@ class MultiSensorFusion(Fusion):
   
   def sequential_fusion(self, proposals):
     self.predict(proposals)
-    self.associate(proposals)
-    self.update()
-    self.initialize()
+    matched_pairs, new_proposals = self.associate(proposals)
+    self.update(matched_pairs)
+    self.initialize(new_proposals)
   
   def predict(self, proposals):
     ''' Make a prediction to the time of observation '''
@@ -124,15 +124,17 @@ class MultiSensorFusion(Fusion):
   
   def associate(self, proposals):
     new_proposals = []
+    matched_pairs = []
     
     for proposal in proposals:
-      matched_pairs = self.find_best_associate_pair(proposal)
-      if len(matched_pairs) > 0:
-        matched_pairs[0].associate(matched_pairs[1])
+      matched_pair = self.find_best_associate_pair(proposal)
+      if len(matched_pair) > 0:
+        matched_pairs.append(matched_pair)
       else:
         new_proposals.append(proposal)
 
     self.new_proposals = new_proposals
+    return matched_pairs, new_proposals
 
   def find_best_associate_pair(self, proposal):
     pairs = []
@@ -144,17 +146,22 @@ class MultiSensorFusion(Fusion):
     if len(pairs) == 0:
       return []
     else:
+      sorted(pairs, key=lambda x: x[0])
       return (pairs[0][1], pairs[0][2])
   
-  def initialize(self):
-    for proposal in self.new_proposals:
+  def initialize(self, new_proposals):
+    ''' create a tracker for each model from each proposal '''
+    for proposal in new_proposals:
       for model in proposal.models:
         tracker = Tracker(proposal.time, model)
         self.trackers.append(tracker)
   
-  def update(self):
-    for tracker in self.trackers:
-      tracker.update()
+  def update(self, pairs):
+    """for tracker in self.trackers:
+      tracker.update()"""
+    for pair in pairs:
+      pair[0].associate(pair[1])
+      pair[0].update()
   
   def clean_track(self, time_acc):
     new_trackers = []
@@ -194,10 +201,6 @@ class MultiSensorFusion(Fusion):
 
     self.trackers = new_trackers
 
-
-
-
-  
   def viz(self):
     if self.fig_name is None:
       pass
