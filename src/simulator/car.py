@@ -17,7 +17,7 @@ from src.util.utils import get_box_corners, get_box_outline
 # classes
 class CarObject():
   def __init__(self, close_point, other_points, velocity, orientation, pos, obj_id):
-    ''' Contain the super set of all the data that sensors need to generate observation '''
+    ''' Contains all the data that sensors need to generate observations '''
     self.close_point = close_point
     self.other_points = other_points
     self.velocity = velocity
