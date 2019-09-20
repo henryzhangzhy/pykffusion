@@ -42,20 +42,23 @@ class Line():
     rand_pair = np.random.randint(0, len(points), [50,2])
     line_points_num_max = 0
     line_max_support = None
+    line_min_error = np.inf
     for idx_pair in rand_pair:
       if idx_pair[0] == idx_pair[1]:
         continue
       else:
         line = cls.find_line_two_point(points[idx_pair[0]], points[idx_pair[1]])
         line_points, _ = line.find_points_close_line(points, cls.close_threshold)
+        line_error = line.find_error(line_points)
         line_points_num = len(line_points)
-        if line_points_num > line_points_num_max:
+        if line_points_num > line_points_num_max and line_error < line_min_error:
           line_points_num_max = line_points_num
           line_max_support = line
+          line_min_error = line_error
         # print(line)
         # print(line_points_num, points[idx_pair[0]], points[idx_pair[1]], idx_pair[0], idx_pair[1])
     line_max_support.update_vertices()
-    return line_max_support, line_points_num_max >= len(points) / 2
+    return line_max_support, line_points_num_max >= len(points) / 2, line_min_error
   
   @ classmethod
   def find_line_two_point(cls, pt1, pt2):
@@ -90,6 +93,13 @@ class Line():
     else:
       return False
   
+  def find_error(self, line_points):
+    error_acc = 0
+    for point in line_points:
+      error_acc += self.distance(point)
+    error_weighted = error_acc / ( len(line_points) * len(line_points))
+    return error_weighted
+
   def distance(self, point):
     return abs(self.a * point[0] + self.b * point[1] + self.c) / math.hypot(self.a, self.b)
   

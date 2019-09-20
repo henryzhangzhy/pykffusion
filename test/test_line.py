@@ -51,7 +51,7 @@ class Test_Line():
   
   def test_find_line(self):
     plt.figure(figsize=(20,10))
-    line_5, is_line_5 = Line.find_line(self.points_5)
+    line_5, is_line_5, line_error_5 = Line.find_line(self.points_5)
     print(line_5)
     line_5.viz()
     plt.pause(3)
@@ -90,7 +90,7 @@ class Test_Line_Integration():
   def test_find_line(self):
     plt.figure(1,figsize=(20,12))
     print(self.scan)
-    line_feature_1, is_line_1 = Line.find_line(self.scan)
+    line_feature_1, is_line_1, line_error_1 = Line.find_line(self.scan)
     print(line_feature_1)
     print(is_line_1)
     self.lidar.viz()
@@ -101,7 +101,7 @@ class Test_Line_Integration():
     plt.scatter([point[0] for point in points_far], [point[1] for point in points_far], marker='o', c='r', label='far')
     plt.legend()
     plt.show()
-    line_feature_2, is_line_2 = Line.find_line(points_far)
+    line_feature_2, is_line_2, line_error_2 = Line.find_line(points_far)
     
     line_feature_2.viz()
     
