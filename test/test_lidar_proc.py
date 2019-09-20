@@ -30,7 +30,8 @@ class Test_LidarProc():
     print(feature)
     # self.car.viz()
     feature.viz()
-    # self.lidar.viz()
+    self.lidar.viz()
+    plt.gca().axis('equal')
     plt.pause(2)
     plt.close()
   

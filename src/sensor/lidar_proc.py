@@ -30,10 +30,10 @@ class LidarProc():
   
   @ classmethod
   def find_feature(cls, scan):
-    line_feature_1, is_line_1 = Line.find_line(scan)
+    line_feature_1, is_line_1, line_error_1 = Line.find_line(scan)
     if is_line_1:
       _, points_far = line_feature_1.find_points_close_line(scan, line_feature_1.close_threshold)
-      line_feature_2, is_line_2 = Line.find_line(points_far)
+      line_feature_2, is_line_2, line_error_2 = Line.find_line(points_far)
       if is_line_2:
         corner_feature = cls.find_corner_feature(line_feature_1, line_feature_2)
         if corner_feature is None:
