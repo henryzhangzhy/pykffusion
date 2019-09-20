@@ -14,6 +14,8 @@
 
 ## TODO
 
+- [ ] should not treat observation equally, we should mark sensors because this will influence the covariance.
+- [ ] add noise to lidar
 - [ ] multi modal fusion logic
   - [ ] merge multi modal data
   - [ ] multi modal association
@@ -49,6 +51,8 @@
     - [x] return corner feature
     - [x] generate proposals based on features
 - [x] add box model
+- [x] lidar proc bug, line estimation is not stable, leading to wrong intersection.
+  - [x] current solution, use max support and min error divided by n^2, n for number of support
 
 Reference
 
