@@ -41,6 +41,14 @@ class MultiSensorFusion(Fusion):
     
   
   def estimate(self, observations, time_acc):
+    ''' given the sensor data and time stamp, return the estimation
+
+    param:
+      observations: a list of sensor data
+      time_acc: accumulated simulation time as a time stamp
+    return:
+      estimations: estimated states of the objects
+    '''
     proposals = self.sensing_module(observations)
     estimations = self.fusion_module(proposals)
 

@@ -29,7 +29,7 @@ class Lidar(Sensor):
     self.variance_angle = 0.0025
   
   def read(self, objs, time_acc):
-    ''' generate lidar scan from obj '''
+    ''' generate lidar scan from objs '''
     sensor_data = []
 
     for obj in objs:
@@ -41,6 +41,7 @@ class Lidar(Sensor):
     return self.data
   
   def find_visible_edges(self, obj):
+    ''' for each point, if not blocked by other edges from the view point, we add it to visible edges '''
     visible_edges = []
     for point_i in obj.other_points:
       edge_i = self.create_edge(self.abs_pos, point_i)
@@ -128,6 +129,7 @@ class Lidar(Sensor):
     return scan_data
   
   def find_edge_scan(self, edge):
+    ''' based on angle of edge in view, generate a list of points on the edge '''
     angle_1 = math.atan2(edge[0][1] - self.abs_pos[1], edge[0][0] - self.abs_pos[0])
     angle_2 = math.atan2(edge[1][1] - self.abs_pos[1], edge[1][0] - self.abs_pos[0])
     point_num = math.ceil(abs(angle_1 - angle_2) / self.angle_res)

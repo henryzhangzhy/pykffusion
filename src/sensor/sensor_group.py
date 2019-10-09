@@ -22,6 +22,14 @@ class SensorGroup():
     self.sensor_group.append(sensor)
   
   def read(self, objs, time_acc):
+    ''' given the object information and time stamp, return the sensor data
+
+    param:
+      objs: a list of object information
+      time_acc: accumulated simulation time as a time stamp
+    return:
+      sensor_data: list of sensor data for each sensor
+    '''
     self.update_pos()
     self.sensor_data = [sensor.read(objs, time_acc) for sensor in self.sensor_group]
     self.viz()

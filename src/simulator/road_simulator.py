@@ -49,6 +49,14 @@ class RoadSimulator(Simulator):
   
 
   def simulate(self, dt):
+    ''' simulate the system dynamics for dt 
+    
+    param:
+      dt: time length
+    return:
+      objs: objects information for sensors
+      time_acc: accumulated simulation time
+    '''
     self.clean_objects()
     self.generate_objects()
 
