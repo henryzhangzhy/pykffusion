@@ -14,7 +14,7 @@
 
 ## TODO
 
-- [ ] should not treat observation equally, we should mark sensors because this will influence the covariance.
+- [ ] should not treat observations equally, we should mark sensors because this will influence the covariance.
 - [ ] add noise to lidar
 - [ ] multi modal fusion logic
   - [ ] merge multi modal data
@@ -45,6 +45,7 @@
   - [x] add collision detection for generating object
 - [x] add lidar model
   - [x] generating lidar data
+  - [x] sensor data generation integration test complete
   - [x] proposal generation based on lidar
     - [x] use ransac to find a line
     - [x] find intersection of lines

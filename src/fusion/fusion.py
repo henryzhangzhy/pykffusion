@@ -63,6 +63,8 @@ class MultiSensorFusion(Fusion):
     proposals = []
 
     for single_sensor_observations in observations:
+      if single_sensor_observations.type == 'Lidar':
+        continue
       single_sensor_proposals = self.generate_proposal(single_sensor_observations)
       for proposal in single_sensor_proposals:
         proposals.append(proposal)
