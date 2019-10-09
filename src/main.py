@@ -34,6 +34,8 @@ from src.fusion.fusion import MultiSensorFusion
 # main
 def main():
   
+  sim_time_max = 2
+
   fig_name_1 = "world"
   fig_name_2 = "logger"
   plt.figure(fig_name_1, figsize=(20,12))
@@ -46,7 +48,7 @@ def main():
   sensor_group.add(Radar((-15,0,0), 50))
   sensor_group.add(Radar((15,0,0), 50))
   # sensor_group.add(Camera((0,0,0), 10))
-  # sensor_group.add(Lidar((0,0,0), 10))
+  sensor_group.add(Lidar((0,0,0), 10))
   dt = sensor_group.get_min_interval()
 
   multi_sensor_filter = MultiSensorFusion(mode='sequential', fig_name=fig_name_1)
@@ -66,7 +68,7 @@ def main():
     log.add_timed(time_acc,{'objs':objs, 'sensor_data':sensor_data, 'estimation':estimation})
     log.viz()
     
-    end_flag = (time_acc > 5)
+    end_flag = (time_acc > sim_time_max)
     display([fig_name_1, fig_name_2], end_flag)
 
   plt.show()
