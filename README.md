@@ -15,6 +15,7 @@
 ## TODO
 
 - [ ] should not treat observations equally, we should mark sensors because this will influence the covariance.
+- [ ] observation variance should be dynamically decided by the sensor.
 - [ ] add noise to lidar
 - [ ] multi modal fusion logic
   - [ ] merge multi modal data

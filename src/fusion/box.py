@@ -28,6 +28,7 @@ class Box2D():
     self.id = obj_id
     self.filter = None
     self.type = 'Box'
+    self.belief = 1
   
   def generate_filter(self):
     state = np.array([self.x, self.y, self.v, self.a, self.orientation, self.yaw_rate, self.l, self.w])

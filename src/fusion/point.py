@@ -27,6 +27,7 @@ class Point2D():
     self.type = 'Point'
     self.filter = None
     self.id = obj_id
+    self.belief = 1
   
   def generate_filter(self):
     state = np.array([self.x, self.y, self.vx, self.vy, self.ax, self.ay])
