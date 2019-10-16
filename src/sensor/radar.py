@@ -16,12 +16,13 @@ from src.sensor.sensor import Sensor, SensorData
 
 # classes
 class RadarData():
-  def __init__(self, x, y, vx, vy, obj_id):
+  def __init__(self, x, y, vx, vy, obj_id, var_coeff):
     self.x = x
     self.y = y
     self.vx = vx
     self.vy = vy
     self.id = obj_id
+    self.var_coeff = var_coeff
 
 class Radar(Sensor):
   def __init__(self, rel_pos=(0,0,0), frequency=50, orientation=0, mode='center', b_noise=True, abs_pos=[0,0,0]):
@@ -61,7 +62,7 @@ class Radar(Sensor):
       vx = obj.velocity * math.cos(obj.orientation) + random.gauss(0, self.variance_velocity)
       vy = obj.velocity * math.sin(obj.orientation) + random.gauss(0, self.variance_velocity)
       
-      sensor_data.append(RadarData(x, y, vx, vy, obj.id))
+      sensor_data.append(RadarData(x, y, vx, vy, obj.id, 1))
     
     self.data = SensorData(self.type, time_acc, sensor_data)
     return self.data
