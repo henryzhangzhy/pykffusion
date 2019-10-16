@@ -63,8 +63,6 @@ class MultiSensorFusion(Fusion):
     proposals = []
 
     for single_sensor_observations in observations:
-      if single_sensor_observations.type == 'Lidar':
-        continue
       single_sensor_proposals = self.generate_proposal(single_sensor_observations)
       for proposal in single_sensor_proposals:
         proposals.append(proposal)
@@ -78,12 +76,12 @@ class MultiSensorFusion(Fusion):
 
     if observations.type == 'Radar':
       for obs in observations.data:
-        proposal = Proposal(observations.time, [Point2D(obs.x, obs.y, obs.vx, obs.vy, obs.id)])
+        proposal = Proposal(observations.type, observations.time, [Point2D(obs.x, obs.y, obs.vx, obs.vy, obs.id)])
         proposals.append(proposal)
     elif observations.type == 'Lidar':
       for obs in observations.data:
         models = LidarProc.find_models(observations.time, obs)
-        proposal = Proposal(observations.time, models)
+        proposal = Proposal(observations.type, observations.time, models)
         proposals.append(proposal)
     elif observations.type == 'Camera':
       raise NotImplementedError
@@ -128,7 +126,11 @@ class MultiSensorFusion(Fusion):
     self.initialize(new_proposals)
   
   def predict(self, proposals):
-    ''' Make a prediction to the time of observation '''
+    ''' Make a prediction to the time of observation, 
+    
+    NOTE: Current setting is only for the synchronized data
+    
+    '''
     for tracker in self.trackers:
       tracker.predict(proposals[0].time)
   
@@ -147,6 +149,8 @@ class MultiSensorFusion(Fusion):
     return matched_pairs, new_proposals
 
   def find_best_associate_pair(self, proposal):
+    ''' return the best association pair between tracker and model, empty list if no match.
+    Best in a sense of matching score. '''
     pairs = []
     for model in proposal.models:
       for tracker in self.trackers:
