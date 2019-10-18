@@ -48,8 +48,8 @@ class Logger():
           for estimate in estimates:
             for obj in objs:
               if estimate.id == obj.id:
-                error = math.hypot(estimate.state[0] - obj.pos[0], \
-                                   estimate.state[1] - obj.pos[1])
+                error = math.hypot(estimate.state[0,0] - obj.pos[0], \
+                                   estimate.state[1,0] - obj.pos[1])
                 error_time.append(error)
                 innovation_time.append(math.hypot(estimate.innovation[0], estimate.innovation[1]))
           

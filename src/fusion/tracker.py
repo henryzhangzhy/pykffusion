@@ -74,7 +74,7 @@ class Tracker():
   def find_associate_score(self, model):
     ''' associate track and proposal, return score if success and update observation, None if not associated '''
     threshold = self.threshold_associate
-    score = math.hypot(model.x - self.estimate.state[0], model.y - self.estimate.state[1])
+    score = math.hypot(model.x - self.estimate.state[0,0], model.y - self.estimate.state[1,0])
     b_angle_match = is_angle_match(model.get_orientation(), self.model.get_orientation())
     if score < threshold and b_angle_match:
       return score
@@ -84,7 +84,7 @@ class Tracker():
   def associate(self, model):
     ''' associate track and proposal, return True if success and update observation, False if not associated '''
     threshold = self.threshold_associate
-    if math.hypot(model.x - self.estimate.state[0], model.y - self.estimate.state[1]) < threshold:
+    if math.hypot(model.x - self.estimate.state[0,0], model.y - self.estimate.state[1,0]) < threshold:
       self.observation = model.generate_observation(self.model.type)
       return True
     else:
@@ -104,14 +104,14 @@ class Tracker():
       return tracker
   
   def viz(self):
-    plt.scatter(self.estimate.state[0], \
-                self.estimate.state[1], \
+    plt.scatter(self.estimate.state[0,0], \
+                self.estimate.state[1,0], \
                 c='r', marker='o', label='tracker')
-    plt.text(self.estimate.state[0], \
-             self.estimate.state[1] + 2, \
+    plt.text(self.estimate.state[0,0], \
+             self.estimate.state[1,0] + 2, \
              'Tid:{:d}, v:({:.1f}, {:.1f})'.format(self.id, \
-                                                   self.estimate.state[2], \
-                                                   self.estimate.state[3]))
+                                                   self.estimate.state[2,0], \
+                                                   self.estimate.state[3,0]))
                     
   
     
