@@ -35,7 +35,7 @@ class KalmanFilter():
   def update(self, z):
     self.innovation = np.array(z).reshape([-1,1]) - self.mtx_observation @ self.x_pre
     self.innovation_cov = self.noise_observation + self.mtx_observation @ self.P_pre @ self.mtx_observation.T
-    self.gain = self.P_pre @ self.mtx_observation @ np.linalg.inv(self.innovation_cov)
+    self.gain = self.P_pre @ self.mtx_observation.T @ np.linalg.inv(self.innovation_cov)
     self.x_post = self.x_pre + self.gain @ self.innovation
     self.P_post = self.P_pre - self.gain @ self.innovation_cov @ self.gain.T
   
